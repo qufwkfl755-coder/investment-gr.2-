@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>지권 문제 투자 - 실시간 멀티 디바이스 웹앱</title>
+    <title>지권 문제 투자 (모둠전) - 실시간 멀티 디바이스 웹앱</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -50,7 +50,6 @@
 </head>
 <body class="p-3 md:p-5 flex flex-col justify-between min-h-screen">
 
-    <!-- 상단 헤더 / 네비게이션 바 -->
     <header class="glass-panel rounded-2xl p-3.5 mb-3 flex flex-wrap justify-between items-center shadow-lg border-b border-indigo-500/20">
         <div class="flex items-center gap-3">
             <div class="bg-indigo-600/30 p-2.5 rounded-xl border border-indigo-400/30 text-indigo-400 text-xl">
@@ -58,13 +57,12 @@
             </div>
             <div>
                 <h1 class="text-lg md:text-xl font-black tracking-wide text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-orange-300 to-emerald-300 font-title">
-                    지권 문제 투자 <span id="gameModeBadgeHeader" class="text-xs px-2 py-0.5 rounded-full bg-amber-500/30 text-amber-300 border border-amber-400/30 font-sans">실시간 미리보기</span>
+                    지권 문제 투자 <span id="gameModeBadgeHeader" class="text-xs px-2 py-0.5 rounded-full bg-amber-500/30 text-amber-300 border border-amber-400/30 font-sans">모둠전 (1~5모둠)</span>
                 </h1>
-                <p class="text-xs text-slate-400">중1 과학 [지구계, 지권의 층상 구조, 암석과 광물] 게이미피케이션 수업 도구</p>
+                <p class="text-xs text-slate-400">중1 과학 [지구계, 지권의 층상 구조, 암석과 광물] 모둠별 게이미피케이션 수업 도구</p>
             </div>
         </div>
 
-        <!-- 우측 상단 상태 버튼 -->
         <div class="flex items-center gap-2 mt-2 sm:mt-0">
             <div id="roomPinBadge" class="hidden px-3 py-1 rounded-xl bg-amber-500/20 border border-amber-500/40 text-amber-300 font-mono font-bold text-sm">
                 📌 PIN: <span id="pinDisplay" class="text-base font-black">---</span>
@@ -80,17 +78,14 @@
         </div>
     </header>
 
-    <!-- 메인 동적 화면 컨테이너 -->
     <main id="appContainer" class="flex-grow flex flex-col justify-center">
         <!-- JavaScript로 동적 화면 전환 -->
     </main>
 
-    <!-- 푸터 -->
     <footer class="mt-4 text-center text-xs text-slate-500 py-1.5 border-t border-slate-800/60">
-        수업디자인 연수 오전 강의용 | 중학교 1학년 과학 [지권 문제 투자 경매 시스템]
+        수업디자인 연수 오전 강의용 | 중학교 1학년 과학 [지권 문제 투자 시스템 - 모둠전]
     </footer>
 
-    <!-- 보안관 찬스 팝업 모달 -->
     <div id="sheriffModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="glass-panel bg-slate-900/90 border-2 border-amber-500/50 rounded-3xl p-6 md:p-8 max-w-lg w-full glow-effect relative transform transition-all duration-300 scale-95 opacity-0" id="sheriffModalCard">
             <button onclick="closeSheriffModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center">
@@ -100,7 +95,7 @@
                 <i class="fa-solid fa-shield-halved text-3xl animate-bounce"></i>
                 <div>
                     <h3 class="text-xl font-bold font-title text-amber-300">보안관 지식 검증 리포트</h3>
-                    <span class="text-xs text-amber-500/80" id="sheriffTeamName">나만의 비밀 힌트</span>
+                    <span class="text-xs text-amber-500/80" id="sheriffTeamName">모둠 비밀 힌트</span>
                 </div>
             </div>
             <hr class="border-slate-700/60 mb-4">
@@ -128,14 +123,13 @@
         </div>
     </div>
 
-    <!-- 파산 학생 회생 퀴즈 모달 -->
     <div id="rescueQuizModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="glass-panel bg-slate-900/90 border-2 border-emerald-500/50 rounded-3xl p-6 md:p-8 max-w-lg w-full glow-effect relative space-y-4">
             <div class="flex items-center gap-3 text-emerald-400">
                 <i class="fa-solid fa-kit-medical text-3xl animate-pulse"></i>
                 <div>
-                    <h3 class="text-xl font-bold font-title text-emerald-300">보안관 지식 회생 개념 퀴즈 (1회 제한)</h3>
-                    <span class="text-xs text-emerald-500/80">단 한번 제공되는 회생 기회입니다!</span>
+                    <h3 class="text-xl font-bold font-title text-emerald-300">보안관 모둠 회생 개념 퀴즈 (1회 제한)</h3>
+                    <span class="text-xs text-emerald-500/80">모둠당 단 한번 제공되는 회생 기회입니다!</span>
                 </div>
             </div>
             <hr class="border-slate-700/60">
@@ -143,7 +137,7 @@
             <div class="bg-slate-950/80 p-4 rounded-2xl border border-slate-800 space-y-3">
                 <div class="text-xs text-amber-400 font-bold"><i class="fa-solid fa-circle-question"></i> 개념 확인 문제</div>
                 <p class="text-sm font-semibold text-slate-100" id="rescueQuizStatement">
-                    지표면 근처에서 마그마가 빨리 식어서 만들어진 화산암은 결정(알갱이)의 크기가 작다. (O/X)
+                    지표면 근처에서 마그마가 빨리 식어서 만들어진 화산암은 결정의 크기가 작다. (O/X)
                 </p>
             </div>
 
@@ -158,7 +152,6 @@
         </div>
     </div>
 
-    <!-- 스크립트 메인 로직 -->
     <script>
         window.gameState = {
             role: null,
@@ -166,8 +159,7 @@
             myTeamId: null,
             roomData: null,
             soundEnabled: true,
-            setupGameMode: 'individual',
-            setupCount: 21
+            setupCount: 5
         };
 
         window.clientLocalInput = {
@@ -179,7 +171,7 @@
         window.auth = null;
         window.roomUnsubscribe = null;
         window.hostPingInterval = null;
-        window.appId = 'earth-strata-investment';
+        window.appId = 'earth-strata-investment-team';
 
         let resolveAuthPromise;
         window.authReady = new Promise((resolve) => {
@@ -191,7 +183,6 @@
             return window.db.collection('artifacts').doc(window.appId).collection('public').doc('data').collection('rooms').doc(pin);
         };
 
-        // 지권 및 화성암, 지구계 핵심 15문항 데이터베이스
         window.questionBank = [
             {
                 id: 1,
@@ -335,7 +326,7 @@
             if (!toast) {
                 toast = document.createElement('div');
                 toast.id = 'toastMessage';
-                toast.className = 'fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-indigo-600 text-white font-bold px-5 py-3 rounded-2xl shadow-2xl border border-indigo-400 text-sm transition-all duration-300 opacity-0 pointer-events-none flex items-center gap-2';
+                toast.className = 'fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-amber-600 text-white font-bold px-5 py-3 rounded-2xl shadow-2xl border border-amber-400 text-sm transition-all duration-300 opacity-0 pointer-events-none flex items-center gap-2';
                 document.body.appendChild(toast);
             }
             toast.innerHTML = `<i class="fa-solid fa-circle-info"></i> <span>${msg}</span>`;
@@ -376,7 +367,7 @@
                 if (resolveAuthPromise) resolveAuthPromise();
             }
 
-            var savedPin = localStorage.getItem('earth_strata_host_pin');
+            var savedPin = localStorage.getItem('earth_strata_team_host_pin');
             if (savedPin && window.db) {
                 try {
                     var docSnap = await window.getRoomDocRef(savedPin).get();
@@ -440,11 +431,11 @@
         window.toggleSound = function() {
             window.gameState.soundEnabled = !window.gameState.soundEnabled;
             document.getElementById('soundText').innerText = window.gameState.soundEnabled ? '효과음 ON' : '효과음 OFF';
-            document.getElementById('soundIcon').className = window.gameState.soundEnabled ? 'fa-solid fa-volume-high text-indigo-400' : 'fa-solid fa-volume-xmark text-slate-500';
+            document.getElementById('soundIcon').className = window.gameState.soundEnabled ? 'fa-solid fa-volume-high text-amber-400' : 'fa-solid fa-volume-xmark text-slate-500';
         };
 
         window.exitToHome = function() {
-            if (confirm("메인 화면으로 돌아가시겠습니까? (진행 중인 투자 정보는 보존됩니다)")) {
+            if (confirm("메인 화면으로 돌아가시겠습니까? (진행 중인 모둠 투자 정보는 보존됩니다)")) {
                 if (window.hostPingInterval) clearInterval(window.hostPingInterval);
                 
                 if (window.gameState.role === 'host' && window.db && window.gameState.roomId) {
@@ -464,12 +455,11 @@
         };
 
         window.renderRoleSelection = function() {
-            var savedPin = localStorage.getItem('earth_strata_host_pin');
+            var savedPin = localStorage.getItem('earth_strata_team_host_pin');
             var container = document.getElementById('appContainer');
 
             container.innerHTML = `
                 <div class="max-w-4xl mx-auto w-full grid grid-cols-1 md:grid-cols-2 gap-6 my-auto">
-                    <!-- 교사 모드 카드 -->
                     <div class="glass-panel rounded-3xl p-6 md:p-8 glow-effect flex flex-col justify-between space-y-6 border border-amber-500/30 hover:border-amber-400 transition">
                         <div class="space-y-4">
                             <div class="w-14 h-14 rounded-2xl bg-amber-600/30 border border-amber-400/40 text-amber-300 flex items-center justify-center text-2xl">
@@ -477,37 +467,20 @@
                             </div>
                             <div>
                                 <h2 class="text-2xl font-black font-title text-amber-100">🖥️ 교사 화면 (전면 스크린)</h2>
-                                <p class="text-xs text-slate-300 mt-1">전자칠판에 방 PIN을 띄우고, 학생들의 입장 및 문제 투자를 실시간 제어합니다.</p>
+                                <p class="text-xs text-slate-300 mt-1">전자칠판에 방 PIN을 띄우고, 1~5모둠의 실시간 문제 투자를 제어합니다.</p>
                             </div>
 
-                            <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-700/60 space-y-3">
-                                <div>
-                                    <label class="block text-xs font-bold text-slate-400 mb-1.5">대결 방식 및 인원 설정</label>
-                                    <div class="grid grid-cols-2 gap-2 mb-2">
-                                        <button onclick="setHostGameMode('individual')" id="modeBtnIndiv" class="py-2.5 rounded-xl border text-xs font-bold transition ${window.gameState.setupGameMode === 'individual' ? 'bg-amber-600 border-amber-400 text-white shadow' : 'bg-slate-800 border-slate-700 text-slate-400'}">
-                                            👤 개별전 (번호별)
-                                        </button>
-                                        <button onclick="setHostGameMode('team')" id="modeBtnTeam" class="py-2.5 rounded-xl border text-xs font-bold transition ${window.gameState.setupGameMode === 'team' ? 'bg-amber-600 border-amber-400 text-white shadow' : 'bg-slate-800 border-slate-700 text-slate-400'}">
-                                            👥 모둠전 (그룹별)
-                                        </button>
-                                    </div>
+                            <div class="bg-slate-900/80 p-4 rounded-2xl border border-slate-700/60 space-y-2">
+                                <div class="text-xs font-bold text-amber-300 flex items-center gap-1.5">
+                                    <i class="fa-solid fa-users-rectangle"></i> 모둠전 전용 모드
                                 </div>
-
-                                <div id="countConfigBox">
-                                    <label class="block text-xs font-bold text-slate-400 mb-1">
-                                        ${window.gameState.setupGameMode === 'individual' ? '학급 학생 수 (명)' : '모둠 수 (개)'}
-                                    </label>
-                                    <div class="flex items-center gap-2">
-                                        <input type="number" id="setupCountInput" min="2" max="35" value="${window.gameState.setupCount}" onchange="gameState.setupCount = parseInt(this.value)" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-center text-base font-mono font-bold text-amber-300 focus:outline-none focus:border-amber-400">
-                                        <span class="text-xs text-slate-400 whitespace-nowrap">${window.gameState.setupGameMode === 'individual' ? '명 (1번~N번)' : '개 모둠'}</span>
-                                    </div>
-                                </div>
+                                <p class="text-xs text-slate-300">본 시스템은 학급 <strong>1모둠 ~ 5모둠</strong> 참여에 최적화되어 있습니다.</p>
                             </div>
                         </div>
 
                         <div class="space-y-3">
                             <button onclick="setupHostRoom()" class="w-full py-3.5 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-black rounded-2xl shadow-lg transition font-title text-base flex items-center justify-center gap-2">
-                                <span>새 교사 투자방 생성하기</span>
+                                <span>새 교사 투자방 생성하기 (1~5모둠)</span>
                                 <i class="fa-solid fa-plus"></i>
                             </button>
 
@@ -518,7 +491,7 @@
                                     <i class="fa-solid fa-rotate-left"></i> 기존 방 PIN 번호로 교사 재접속
                                 </label>
                                 <div class="flex gap-2">
-                                    <input type="text" id="hostReconnectPinInput" placeholder="방 PIN 4자리" maxlength="4" class="w-1/2 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-center font-mono font-bold text-amber-300 focus:outline-none focus:border-amber-400 text-sm">
+                                    <input type="number" id="hostReconnectPinInput" placeholder="방 PIN 4자리" maxlength="4" class="w-1/2 bg-slate-950 border border-slate-700 rounded-xl px-3 py-2 text-center font-mono font-bold text-amber-300 focus:outline-none focus:border-amber-400 text-sm">
                                     <button onclick="reconnectHostByInputPin()" class="w-1/2 py-2 bg-amber-500 hover:bg-amber-400 text-slate-950 font-black rounded-xl transition text-xs flex items-center justify-center gap-1 shadow">
                                         <span>교사 재입장</span>
                                         <i class="fa-solid fa-right-to-bracket"></i>
@@ -533,15 +506,14 @@
                         </div>
                     </div>
 
-                    <!-- 학생 접속 카드 -->
                     <div class="glass-panel rounded-3xl p-6 md:p-8 glow-effect flex flex-col justify-between space-y-6 border border-emerald-500/30 hover:border-emerald-400 transition">
                         <div class="space-y-4">
                             <div class="w-14 h-14 rounded-2xl bg-emerald-600/30 border border-emerald-400/40 text-emerald-300 flex items-center justify-center text-2xl">
-                                <i class="fa-solid fa-mobile-screen-button"></i>
+                                <i class="fa-solid fa-users"></i>
                             </div>
                             <div>
-                                <h2 class="text-2xl font-black font-title text-emerald-100">📱 학생 / 모둠 기기 접속</h2>
-                                <p class="text-xs text-slate-300 mt-1">교사가 생성한 4자리 PIN 번호를 입력하면 내 번호 선택 메뉴가 나타납니다.</p>
+                                <h2 class="text-2xl font-black font-title text-emerald-100">📱 모둠 기기 접속</h2>
+                                <p class="text-xs text-slate-300 mt-1">교사가 생성한 4자리 PIN 번호를 입력하고 소속 모둠을 선택하세요.</p>
                             </div>
                             
                             <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-700/60 space-y-3">
@@ -551,7 +523,7 @@
                                     <div id="pinCheckStatus" class="text-[11px] mt-1 text-slate-400 text-center font-bold">PIN 번호 4자리를 입력해주세요</div>
                                 </div>
                                 <div>
-                                    <label class="block text-xs font-bold text-slate-400 mb-1">내 번호 / 모둠 선택</label>
+                                    <label class="block text-xs font-bold text-slate-400 mb-1">내 모둠 선택</label>
                                     <select id="joinTeamSelect" class="w-full bg-slate-950 border border-slate-700 rounded-xl px-3 py-2.5 text-sm font-bold text-slate-200 focus:outline-none focus:border-emerald-400">
                                         <option value="">PIN 번호를 먼저 입력하세요</option>
                                     </select>
@@ -559,19 +531,12 @@
                             </div>
                         </div>
                         <button onclick="joinClientRoom()" class="w-full py-4 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-black rounded-2xl shadow-lg transition font-title text-base flex items-center justify-center gap-2">
-                            <span>문제 투자 참여하기</span>
+                            <span>모둠 문제 투자 참여하기</span>
                             <i class="fa-solid fa-right-to-bracket"></i>
                         </button>
                     </div>
                 </div>
             `;
-        };
-
-        window.setHostGameMode = function(mode) {
-            playSound('click');
-            window.gameState.setupGameMode = mode;
-            window.gameState.setupCount = mode === 'individual' ? 21 : 4;
-            window.renderRoleSelection();
         };
 
         window.startHostHeartbeat = function(pin) {
@@ -621,7 +586,7 @@
                     if (docSnap.exists) {
                         var room = docSnap.data();
                         statusDiv.className = "text-[11px] mt-1 text-emerald-400 text-center font-bold";
-                        statusDiv.innerText = "✅ 방 확인 완료 (" + (room.mode === 'individual' ? room.maxPlayers + '명 개별전' : room.maxPlayers + '개 모둠전') + ")";
+                        statusDiv.innerText = "✅ 방 확인 완료 (1~5모둠전)";
                         window.updateJoinSelectOptions(room);
                     } else if (retryCount < 2) {
                         setTimeout(() => window.checkPinAndLoadTeams(retryCount + 1), 800);
@@ -684,7 +649,7 @@
                         window.gameState.roomId = pin;
                         window.gameState.roomData = docSnap.data();
 
-                        localStorage.setItem('earth_strata_host_pin', pin);
+                        localStorage.setItem('earth_strata_team_host_pin', pin);
 
                         document.getElementById('pinDisplay').innerText = pin;
                         document.getElementById('roomPinBadge').classList.remove('hidden');
@@ -704,7 +669,7 @@
 
                         window.startHostHeartbeat(pin);
                         window.renderHostScreen();
-                        window.showToast(`🎉 PIN ${pin}번 투자방에 교사 권한으로 복귀했습니다!`);
+                        window.showToast(`🎉 PIN ${pin}번 모둠방에 교사 권한으로 복귀했습니다!`);
                         return;
                     }
                 } catch (err) {
@@ -722,24 +687,21 @@
             window.gameState.role = 'host';
             window.gameState.roomId = pin;
 
-            localStorage.setItem('earth_strata_host_pin', pin);
+            localStorage.setItem('earth_strata_team_host_pin', pin);
 
             document.getElementById('pinDisplay').innerText = pin;
             document.getElementById('roomPinBadge').classList.remove('hidden');
 
-            var mode = window.gameState.setupGameMode;
-            var count = window.gameState.setupCount || (mode === 'individual' ? 21 : 4);
-
             var initialParticipants = {};
-            for (var i = 1; i <= count; i++) {
+            for (var i = 1; i <= 5; i++) {
                 var key = i.toString();
-                var name = mode === 'individual' ? `${i}번` : `${i}모둠`;
+                var name = `${i}모둠`;
                 initialParticipants[key] = {
                     id: key,
                     name: name,
                     points: 100,
                     sheriffChances: 2,
-                    currentBid: 10,
+                    currentBid: 5,
                     choice: null,
                     submitted: false,
                     joined: false,
@@ -751,8 +713,8 @@
 
             var roomData = {
                 roomId: pin,
-                mode: mode,
-                maxPlayers: count,
+                mode: 'team',
+                maxPlayers: 5,
                 status: 'waiting',
                 currentQuestionIdx: 0,
                 isRevealed: false,
@@ -801,43 +763,32 @@
             var teamsList = Object.values(data.teams);
             var totalCount = teamsList.length;
             var joinedCount = teamsList.filter(function(t) { return t.joined; }).length;
-            var isIndividual = data.mode === 'individual';
 
-            var gridCols = "grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-7";
-            if (totalCount <= 6) {
-                gridCols = "grid-cols-2 sm:grid-cols-3 lg:grid-cols-4";
-            }
-
-            document.getElementById('gameModeBadgeHeader').innerText = isIndividual ? `개별전 대기실 (${totalCount}명)` : `모둠전 대기실 (${totalCount}모둠)`;
+            document.getElementById('gameModeBadgeHeader').innerText = `모둠전 대기실 (1~5모둠)`;
 
             container.innerHTML = `
-                <div class="max-w-5xl mx-auto w-full space-y-4 my-auto py-2">
+                <div class="max-w-4xl mx-auto w-full space-y-4 my-auto py-2">
                     <div class="glass-panel rounded-3xl p-6 md:p-8 text-center glow-effect border-2 border-amber-500/40 relative overflow-hidden">
                         <div class="text-xs sm:text-sm font-bold text-amber-300 tracking-wider uppercase mb-1">
-                            <i class="fa-solid fa-wifi mr-1.5 animate-pulse text-emerald-400"></i>학생 기기 접속용 방 PIN 번호
+                            <i class="fa-solid fa-wifi mr-1.5 animate-pulse text-emerald-400"></i>모둠 기기 접속용 방 PIN 번호
                         </div>
-                        <div class="text-6xl sm:text-8xl font-black font-mono tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-yellow-200 to-amber-400 my-2 drop-shadow-lg">
+                        <div class="text-6xl sm:text-8xl font-black font-mono tracking-widest text-transparent bg-clip-text bg-gradient-to-r from-amber-300 via-orange-300 to-emerald-300 my-2 drop-shadow-lg">
                             ${data.roomId}
                         </div>
                         <p class="text-xs sm:text-sm text-slate-300">
-                            학생들은 오른쪽 <span class="text-emerald-300 font-bold">'학생 접속'</span>에서 PIN 번호 <span class="font-bold text-amber-300 font-mono text-base">${data.roomId}</span>와(과) 본인 번호를 선택하여 입장하세요.
+                            각 모둠은 오른쪽 <span class="text-emerald-300 font-bold">'모둠 기기 접속'</span>에서 PIN 번호 <span class="font-bold text-amber-300 font-mono text-base">${data.roomId}</span>와(과) 모둠 번호를 선택하여 입장하세요.
                         </p>
 
                         <div class="mt-4 pt-4 border-t border-slate-700/50 flex flex-wrap justify-between items-center gap-3">
                             <div class="flex items-center gap-2 text-xs md:text-sm font-bold">
-                                <span class="text-slate-400">접속 현황:</span>
-                                <span class="text-emerald-400 font-black text-lg md:text-xl">${joinedCount} / ${totalCount} ${isIndividual ? '명' : '모둠'}</span>
+                                <span class="text-slate-400">모둠 접속 현황:</span>
+                                <span class="text-emerald-400 font-black text-lg md:text-xl">${joinedCount} / ${totalCount} 모둠</span>
                                 <span class="text-xs font-normal text-slate-400">(${Math.round((joinedCount/totalCount)*100)}%)</span>
                             </div>
-                            <div class="flex items-center gap-2">
-                                <button onclick="simulateMockJoins()" class="px-3 py-1.5 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/40 text-purple-300 text-xs rounded-xl font-bold transition flex items-center gap-1.5">
-                                    <i class="fa-solid fa-wand-magic-sparkles"></i>
-                                    <span>전원 가상 접속 시뮬레이션</span>
-                                </button>
-                                <button onclick="changeParticipantCountHost()" class="px-3 py-1.5 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-slate-300 text-xs rounded-xl font-bold transition">
-                                    <i class="fa-solid fa-users-gear mr-1"></i>인원 변경
-                                </button>
-                            </div>
+                            <button onclick="simulateMockJoins()" class="px-3 py-1.5 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/40 text-purple-300 text-xs rounded-xl font-bold transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i>
+                                <span>1~5모둠 전원 가상 접속</span>
+                            </button>
                         </div>
                     </div>
 
@@ -845,7 +796,7 @@
                         <div class="flex justify-between items-center px-1">
                             <h3 class="font-bold text-sm text-slate-200 font-title flex items-center gap-2">
                                 <i class="fa-solid fa-users text-amber-400"></i>
-                                <span>참가자 실시간 접속 현황</span>
+                                <span>1~5모둠 실시간 접속 현황</span>
                             </h3>
                             <div class="flex items-center gap-3 text-xs">
                                 <span class="flex items-center gap-1 text-emerald-400 font-bold"><span class="w-2.5 h-2.5 rounded-full bg-emerald-400 inline-block animate-ping"></span> 접속 완료 (${joinedCount})</span>
@@ -853,15 +804,15 @@
                             </div>
                         </div>
 
-                        <div class="grid ${gridCols} gap-2.5 max-h-[38vh] overflow-y-auto p-1">
+                        <div class="grid grid-cols-2 sm:grid-cols-5 gap-3 p-1">
                             ${teamsList.map(function(t) {
                                 return `
-                                    <div class="p-3 rounded-2xl border text-center transition flex flex-col justify-between items-center space-y-1 ${t.joined ? 'bg-emerald-950/40 border-emerald-500/60 text-emerald-200 shadow-md shadow-emerald-950/50' : 'bg-slate-900/40 border-slate-800 text-slate-500'}">
-                                        <div class="w-8 h-8 rounded-xl flex items-center justify-center font-bold text-sm ${t.joined ? 'bg-emerald-500/30 text-emerald-300 border border-emerald-400/40' : 'bg-slate-800 text-slate-600'}">
-                                            <i class="fa-solid ${t.joined ? 'fa-user-check' : 'fa-user'}"></i>
+                                    <div class="p-4 rounded-2xl border text-center transition flex flex-col justify-between items-center space-y-2 ${t.joined ? 'bg-emerald-950/40 border-emerald-500/60 text-emerald-200 shadow-md shadow-emerald-950/50' : 'bg-slate-900/40 border-slate-800 text-slate-500'}">
+                                        <div class="w-10 h-10 rounded-2xl flex items-center justify-center font-bold text-base ${t.joined ? 'bg-emerald-500/30 text-emerald-300 border border-emerald-400/40' : 'bg-slate-800 text-slate-600'}">
+                                            <i class="fa-solid ${t.joined ? 'fa-users' : 'fa-user-clock'}"></i>
                                         </div>
-                                        <div class="font-bold text-xs truncate w-full font-title">${t.name}</div>
-                                        <span class="text-[10px] px-2 py-0.5 rounded-full font-bold ${t.joined ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-slate-800/80 text-slate-500'}">
+                                        <div class="font-black text-sm font-title">${t.name}</div>
+                                        <span class="text-[11px] px-2.5 py-0.5 rounded-full font-bold ${t.joined ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-slate-800/80 text-slate-500'}">
                                             ${t.joined ? '접속 완료' : '대기 중'}
                                         </span>
                                     </div>
@@ -870,7 +821,7 @@
                         </div>
                     </div>
 
-                    <button onclick="startHostGame()" class="w-full py-4 bg-gradient-to-r from-amber-500 via-orange-500 to-indigo-600 hover:from-amber-400 hover:to-indigo-500 text-slate-950 font-black rounded-2xl shadow-xl transition font-title text-lg flex items-center justify-center gap-3">
+                    <button onclick="startHostGame()" class="w-full py-4 bg-gradient-to-r from-amber-500 via-orange-500 to-emerald-600 hover:from-amber-400 hover:to-emerald-500 text-slate-950 font-black rounded-2xl shadow-xl transition font-title text-lg flex items-center justify-center gap-3">
                         <i class="fa-solid fa-play text-xl animate-bounce"></i>
                         <span>지권 문제 투자 시작하기 (문항 1 진행)</span>
                     </button>
@@ -907,7 +858,6 @@
             }
         };
 
-        // 2. 교사 대시보드
         window.renderHostDashboard = function() {
             var container = document.getElementById('appContainer');
             var data = window.gameState.roomData;
@@ -916,27 +866,19 @@
             var teamsList = Object.values(data.teams);
             var totalCount = teamsList.length;
             var submittedCount = teamsList.filter(function(t) { return t.submitted; }).length;
-            var isIndividual = data.mode === 'individual';
-
-            var gridCols = "grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7";
-            if (totalCount <= 6) {
-                gridCols = "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4";
-            }
-
-            document.getElementById('gameModeBadgeHeader').innerText = isIndividual ? `개별전 (${totalCount}명)` : `모둠전 (${totalCount}모둠)`;
 
             container.innerHTML = `
                 <div class="space-y-3">
                     <div class="glass-panel rounded-2xl p-4 md:p-5 relative overflow-hidden border-2 border-amber-500/30">
                         <div class="flex flex-wrap justify-between items-center gap-2 mb-2">
                             <span class="text-xs font-bold px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/30">
-                                문항 ${data.currentQuestionIdx + 1} / ${window.questionBank.length} · [${q.category}]
+                                문제 ${data.currentQuestionIdx + 1} / ${window.questionBank.length} · [${q.category}]
                             </span>
 
                             <div class="flex items-center gap-3">
                                 <div class="text-xs font-bold bg-slate-900/80 px-3 py-1 rounded-xl border border-slate-700/80 flex items-center gap-2">
-                                    <span class="text-slate-400">제출 현황:</span>
-                                    <span class="text-emerald-400 font-black">${submittedCount} / ${totalCount} ${isIndividual ? '명' : '팀'}</span>
+                                    <span class="text-slate-400">투자 현황:</span>
+                                    <span class="text-emerald-400 font-black">${submittedCount} / ${totalCount} 모둠</span>
                                     <div class="w-16 bg-slate-800 rounded-full h-2 overflow-hidden hidden sm:block">
                                         <div class="bg-emerald-500 h-full transition-all duration-300" style="width: ${(submittedCount / totalCount) * 100}%"></div>
                                     </div>
@@ -944,7 +886,7 @@
 
                                 <button onclick="simulateMockSubmissions()" class="px-2.5 py-1 bg-purple-500/20 hover:bg-purple-500/30 border border-purple-500/40 text-purple-300 text-xs rounded-xl font-bold transition flex items-center gap-1">
                                     <i class="fa-solid fa-wand-magic-sparkles"></i>
-                                    <span>모의 제출 시뮬레이션</span>
+                                    <span>모의 투자 시뮬레이션</span>
                                 </button>
                             </div>
                         </div>
@@ -958,7 +900,7 @@
                         ${data.isRevealed ? `
                             <div class="mt-3 p-3.5 rounded-xl border ${q.isTrue ? 'bg-emerald-950/50 border-emerald-500/50 text-emerald-200' : 'bg-rose-950/50 border-rose-500/50 text-rose-200'}">
                                 <div class="flex items-center gap-2 font-black text-lg mb-1">
-                                    <span>판정 결과:</span>
+                                    <span>정답 판정:</span>
                                     <span class="${q.isTrue ? 'text-emerald-400' : 'text-rose-400'}">${q.isTrue ? '⭕ 참 (TRUE)' : '❌ 거짓 (FALSE)'}</span>
                                 </div>
                                 <p class="text-xs md:text-sm font-medium leading-relaxed">${q.explanation}</p>
@@ -966,21 +908,21 @@
                         ` : ''}
                     </div>
 
-                    <div class="grid ${gridCols} gap-2 max-h-[48vh] overflow-y-auto p-1">
+                    <div class="grid grid-cols-1 sm:grid-cols-3 lg:grid-cols-5 gap-3 p-1">
                         ${teamsList.map(function(t) {
                             var isZero = t.points <= 0;
                             var isRescueRequested = t.rescueRequested;
 
                             return `
-                                <div class="glass-panel rounded-xl p-2 border ${isRescueRequested ? 'border-amber-400 bg-amber-950/40 animate-pulse' : (isZero ? 'border-rose-500/80 bg-rose-950/30' : (data.isRevealed ? ( t.submitted && ((t.choice === 'True' && q.isTrue) || (t.choice === 'False' && !q.isTrue)) ? 'border-emerald-500 bg-emerald-950/30' : 'border-rose-500 bg-rose-950/30' ) : (t.submitted ? 'border-amber-500/60 bg-amber-950/30' : 'border-slate-800 bg-slate-900/40')))} space-y-1 transition">
+                                <div class="glass-panel rounded-2xl p-3.5 border ${isRescueRequested ? 'border-amber-400 bg-amber-950/40 animate-pulse' : (isZero ? 'border-rose-500/80 bg-rose-950/30' : (data.isRevealed ? ( t.submitted && ((t.choice === 'True' && q.isTrue) || (t.choice === 'False' && !q.isTrue)) ? 'border-emerald-500 bg-emerald-950/30' : 'border-rose-500 bg-rose-950/30' ) : (t.submitted ? 'border-amber-500/60 bg-amber-950/30' : 'border-slate-800 bg-slate-900/40')))} space-y-2 transition">
                                     <div class="flex justify-between items-center">
-                                        <span class="font-bold text-xs text-slate-100 font-title truncate">${t.name}</span>
-                                        <span class="text-[10px] px-1.5 py-0.5 rounded font-bold ${isRescueRequested ? 'bg-amber-400 text-slate-950 font-black' : (isZero ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40' : (t.submitted ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-slate-800 text-slate-500'))}">
+                                        <span class="font-black text-sm text-slate-100 font-title">${t.name}</span>
+                                        <span class="text-[10px] px-2 py-0.5 rounded font-bold ${isRescueRequested ? 'bg-amber-400 text-slate-950 font-black' : (isZero ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40' : (t.submitted ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-slate-800 text-slate-500'))}">
                                             ${isRescueRequested ? '🆘 회생요청' : (isZero ? '파산' : (t.submitted ? '투자완료✓' : '대기'))}
                                         </span>
                                     </div>
 
-                                    <div class="bg-slate-950/60 p-1.5 rounded-lg text-[11px] space-y-0.5">
+                                    <div class="bg-slate-950/60 p-2 rounded-xl text-xs space-y-1">
                                         <div class="flex justify-between text-slate-400">
                                             <span>자본</span>
                                             <span class="${isZero ? 'text-rose-400 font-black' : 'text-emerald-400 font-bold'}">${t.points}p</span>
@@ -997,8 +939,13 @@
                                         </div>
                                     </div>
 
+                                    <div class="grid grid-cols-2 gap-1.5 pt-1">
+                                        <button onclick="adjustTeamPoints('${t.id}', -20)" class="py-1 bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 rounded-lg text-[11px] font-bold border border-rose-500/30 transition">-20pt</button>
+                                        <button onclick="adjustTeamPoints('${t.id}', 20)" class="py-1 bg-emerald-500/20 hover:bg-emerald-500/30 text-emerald-300 rounded-lg text-[11px] font-bold border border-emerald-500/30 transition">+20pt</button>
+                                    </div>
+
                                     ${isRescueRequested ? `
-                                        <button onclick="approveRescueByHost('${t.id}')" class="w-full py-1 mt-1 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black rounded-lg text-[10px] shadow transition flex items-center justify-center gap-1">
+                                        <button onclick="approveRescueByHost('${t.id}')" class="w-full py-1.5 mt-1 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black rounded-xl text-xs shadow transition flex items-center justify-center gap-1">
                                             <i class="fa-solid fa-gift"></i>
                                             <span>지원금 지급 (+40p)</span>
                                         </button>
@@ -1008,11 +955,7 @@
                         }).join('')}
                     </div>
 
-                    <div class="flex justify-between items-center pt-1">
-                        <button onclick="changeParticipantCountHost()" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 border border-slate-700 text-xs">
-                            <i class="fa-solid fa-users-gear mr-1"></i> 학생 수 변경
-                        </button>
-
+                    <div class="flex justify-end pt-1">
                         ${!data.isRevealed ? `
                             <button onclick="revealHostResult()" class="px-6 py-2.5 bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 text-slate-950 font-black rounded-xl shadow-lg transition text-sm md:text-base font-title flex items-center gap-2">
                                 <i class="fa-solid fa-gavel"></i>
@@ -1036,27 +979,42 @@
             `;
         };
 
+        window.adjustTeamPoints = function(teamId, amount) {
+            var data = window.gameState.roomData;
+            if (data && data.teams && data.teams[teamId]) {
+                var team = data.teams[teamId];
+                team.points = Math.max(0, team.points + amount);
+
+                if (window.db) {
+                    window.getRoomDocRef(data.roomId).update({ teams: data.teams });
+                } else {
+                    window.renderHostScreen();
+                }
+                window.showToast(`⚙️ ${team.name}의 자본금이 ${amount > 0 ? '+' + amount : amount} pt 조정되었습니다.`);
+            }
+        };
+
         window.approveRescueByHost = function(targetTeamId) {
             playSound('correct');
             var data = window.gameState.roomData;
             
             if (data.teams && data.teams[targetTeamId]) {
-                var student = data.teams[targetTeamId];
-                if (!student.rescueUsed) {
-                    student.points += 40;
-                    student.rescueUsed = true;
-                    student.rescueRequested = false;
+                var team = data.teams[targetTeamId];
+                if (!team.rescueUsed) {
+                    team.points += 40;
+                    team.rescueUsed = true;
+                    team.rescueRequested = false;
 
                     if (window.db) {
                         window.getRoomDocRef(data.roomId).update({ teams: data.teams });
                     } else {
                         window.renderHostScreen();
                     }
-                    window.showToast(`🎉 ${student.name} 학생에게 지원금 +40 pt가 지급되었습니다!`);
+                    window.showToast(`🎉 ${team.name}에게 지원금 +40 pt가 지급되었습니다!`);
                 } else {
-                    student.rescueRequested = false;
+                    team.rescueRequested = false;
                     window.getRoomDocRef(data.roomId).update({ teams: data.teams });
-                    window.showToast(`⚠️ ${student.name} 학생은 이미 이번 수업에서 회생 기회를 사용했습니다.`);
+                    window.showToast(`⚠️ ${team.name}은 이미 이번 수업에서 회생 기회를 사용했습니다.`);
                 }
             }
         };
@@ -1067,7 +1025,7 @@
             Object.values(data.teams).forEach(function(t) {
                 if (t.points > 0) {
                     t.choice = Math.random() > 0.35 ? (window.questionBank[data.currentQuestionIdx].isTrue ? 'True' : 'False') : (window.questionBank[data.currentQuestionIdx].isTrue ? 'False' : 'True');
-                    t.currentBid = Math.min(t.points, Math.floor(Math.random() * 4 + 1) * 10);
+                    t.currentBid = Math.min(t.points, Math.floor(Math.random() * 4 + 1) * 5);
                     t.submitted = true;
                 }
             });
@@ -1115,11 +1073,11 @@
                 data.currentQuestionIdx++;
                 data.isRevealed = false;
 
-                window.clientLocalInput = { choice: null, bid: 10 };
+                window.clientLocalInput = { choice: null, bid: 5 };
 
                 Object.values(data.teams).forEach(function(t) {
                     t.choice = null;
-                    t.currentBid = 10;
+                    t.currentBid = Math.min(5, t.points);
                     t.submitted = false;
                     t.sheriffModalData = null;
                 });
@@ -1137,38 +1095,12 @@
             }
         };
 
-        window.changeParticipantCountHost = function() {
-            var data = window.gameState.roomData;
-            var isIndiv = data.mode === 'individual';
-            var countStr = prompt((isIndiv ? '학생 수(명)' : '모둠 수(개)') + '를 입력하세요 (2~35):', data.maxPlayers || "21");
-            var count = parseInt(countStr);
-
-            if (count >= 2 && count <= 35) {
-                var newTeams = {};
-                for (var i = 1; i <= count; i++) {
-                    var key = i.toString();
-                    var name = isIndiv ? `${i}번` : `${i}모둠`;
-                    newTeams[key] = data.teams[key] || {
-                        id: key, name: name, points: 100, sheriffChances: 2, currentBid: 10, choice: null, submitted: false, joined: false, sheriffModalData: null, rescueRequested: false, rescueUsed: false
-                    };
-                }
-                data.teams = newTeams;
-                data.maxPlayers = count;
-
-                if (window.db) {
-                    window.getRoomDocRef(data.roomId).update({ teams: newTeams, maxPlayers: count });
-                } else {
-                    window.renderHostScreen();
-                }
-            }
-        };
-
         window.joinClientRoom = async function() {
             playSound('click');
             await window.authReady;
 
             var pinInput = document.getElementById('joinPinInput');
-            var selectVal = document.getElementById('joinTeamSelect') ? document.getElementById('joinTeamSelect').value : '';
+            var teamId = document.getElementById('joinTeamSelect') ? document.getElementById('joinTeamSelect').value : '';
             var pin = pinInput ? pinInput.value.replace(/[^0-9]/g, '').trim() : '';
 
             if (!pin || pin.length !== 4) {
@@ -1176,14 +1108,9 @@
                 return;
             }
 
-            if (!selectVal) {
-                window.showToast("내 번호/모둠을 선택해 주세요!");
+            if (!teamId) {
+                window.showToast("참여할 모둠을 선택해 주세요!");
                 return;
-            }
-
-            var teamId = selectVal;
-            if (selectVal.indexOf('team_') === 0) {
-                teamId = selectVal.replace('team_', '');
             }
 
             window.gameState.role = 'client';
@@ -1204,22 +1131,7 @@
                     var room = docSnap.data();
                     if (!room.teams) room.teams = {};
                     
-                    if (!room.teams[teamId]) {
-                        var isIndiv = room.mode === 'individual';
-                        room.teams[teamId] = {
-                            id: teamId,
-                            name: isIndiv ? teamId + '번' : teamId + '모둠',
-                            points: 100,
-                            sheriffChances: 2,
-                            currentBid: 10,
-                            choice: null,
-                            submitted: false,
-                            joined: true,
-                            sheriffModalData: null,
-                            rescueRequested: false,
-                            rescueUsed: false
-                        };
-                    } else {
+                    if (room.teams[teamId]) {
                         room.teams[teamId].joined = true;
                     }
 
@@ -1243,16 +1155,16 @@
             } else {
                 if (!window.gameState.roomData) {
                     var initialParticipants = {};
-                    for (var i = 1; i <= 21; i++) {
+                    for (var i = 1; i <= 5; i++) {
                         var key = i.toString();
                         initialParticipants[key] = {
-                            id: key, name: key + '번', points: 100, sheriffChances: 2, currentBid: 10, choice: null, submitted: false, joined: false, sheriffModalData: null, rescueRequested: false, rescueUsed: false
+                            id: key, name: `${i}모둠`, points: 100, sheriffChances: 2, currentBid: 5, choice: null, submitted: false, joined: false, sheriffModalData: null, rescueRequested: false, rescueUsed: false
                         };
                     }
                     window.gameState.roomData = {
                         roomId: pin,
-                        mode: 'individual',
-                        maxPlayers: 21,
+                        mode: 'team',
+                        maxPlayers: 5,
                         status: 'waiting',
                         currentQuestionIdx: 0,
                         isRevealed: false,
@@ -1272,7 +1184,7 @@
             var container = document.getElementById('appContainer');
             var data = window.gameState.roomData;
             var myTeamId = window.gameState.myTeamId;
-            var myTeam = (data && data.teams && data.teams[myTeamId]) ? data.teams[myTeamId] : { name: myTeamId + '번', points: 100, currentBid: 10, choice: null, submitted: false, sheriffChances: 2, joined: true, rescueRequested: false, rescueUsed: false };
+            var myTeam = (data && data.teams && data.teams[myTeamId]) ? data.teams[myTeamId] : { name: myTeamId + '모둠', points: 100, currentBid: 5, choice: null, submitted: false, sheriffChances: 2, joined: true, rescueRequested: false, rescueUsed: false };
 
             if (!data) return;
 
@@ -1351,7 +1263,7 @@
                             <div class="inline-block bg-amber-500/20 text-amber-400 p-3 rounded-2xl border border-amber-400/30">
                                 <i class="fa-solid fa-trophy text-4xl"></i>
                             </div>
-                            <h2 class="text-2xl font-black font-title text-amber-300">투자 결과 발표 종료!</h2>
+                            <h2 class="text-2xl font-black font-title text-amber-300">투자 종료!</h2>
                             <div class="bg-slate-950/80 p-4 rounded-2xl border border-slate-800 space-y-2">
                                 <div class="text-xs text-slate-400">${myTeam.name}의 최종 결과</div>
                                 <div class="text-3xl font-black text-amber-300 font-title">${myRank}위</div>
@@ -1366,8 +1278,15 @@
 
             var q = window.questionBank[data.currentQuestionIdx];
             var currentChoice = window.clientLocalInput.choice;
-            var currentBid = window.clientLocalInput.bid || 10;
-            var isBankrupt = myTeam.points <= 0;
+            
+            // 📌 5포인트 단위 베팅 및 남은 포인트가 5pt, 10pt일 때 슬라이더가 막히지 않도록 안전하게 동적 계산
+            var maxPt = myTeam.points;
+            var minPt = maxPt >= 5 ? 5 : 0;
+            var currentBid = window.clientLocalInput.bid !== undefined ? window.clientLocalInput.bid : Math.min(5, maxPt);
+            if (currentBid > maxPt) currentBid = maxPt;
+            if (currentBid < minPt && maxPt > 0) currentBid = minPt;
+
+            var isBankrupt = maxPt <= 0;
 
             var existingForm = document.getElementById('clientBiddingForm');
             if (existingForm && !myTeam.submitted && !data.isRevealed && !isBankrupt && !myTeam.rescueRequested) {
@@ -1436,7 +1355,7 @@
                         ` : `
                             <div id="clientBiddingForm" class="glass-panel rounded-2xl p-5 space-y-4 border border-amber-500/30">
                                 <div class="flex justify-between items-center">
-                                    <h3 class="font-bold text-sm text-slate-300 font-title"><i class="fa-solid fa-gavel text-amber-400 mr-2"></i>참/거짓 및 투자 금액 선택</h3>
+                                    <h3 class="font-bold text-sm text-slate-300 font-title"><i class="fa-solid fa-gavel text-amber-400 mr-2"></i>참/거짓 및 투자 금액 선택 (5포인트 단위)</h3>
                                     <button onclick="clientUseSheriffChance()" id="sheriffBtn" ${myTeam.sheriffChances <= 0 || myTeam.submitted ? 'disabled' : ''} class="px-2.5 py-1.5 rounded-xl border text-xs font-bold transition ${myTeam.sheriffChances > 0 && !myTeam.submitted ? 'bg-amber-500/20 hover:bg-amber-500/30 border-amber-500/40 text-amber-300 badge-glow' : 'bg-slate-800/50 border-slate-700 text-slate-600 cursor-not-allowed'}">
                                         <i class="fa-solid fa-shield-halved text-amber-400 mr-1"></i>보안관 찬스 (<span id="sheriffCount">${myTeam.sheriffChances}</span>)
                                     </button>
@@ -1453,10 +1372,10 @@
 
                                 <div class="space-y-2 pt-1">
                                     <div class="flex justify-between text-xs text-slate-400">
-                                        <span>문제 투자 금액</span>
+                                        <span>문제 투자 금액 (보유 자본: ${maxPt}pt / 5pt 단위)</span>
                                         <span id="bidValueDisplay" class="text-amber-300 font-black text-sm">${currentBid} pt</span>
                                     </div>
-                                    <input type="range" id="bidRangeInput" min="10" max="${Math.max(10, myTeam.points)}" step="5" value="${currentBid}" oninput="clientUpdateBid(this.value)" ${myTeam.submitted ? 'disabled' : ''} class="w-full accent-amber-500 bg-slate-800 rounded-lg h-2 cursor-pointer">
+                                    <input type="range" id="bidRangeInput" min="${minPt}" max="${maxPt}" step="5" value="${currentBid}" oninput="clientUpdateBid(this.value)" ${myTeam.submitted ? 'disabled' : ''} class="w-full accent-amber-500 bg-slate-800 rounded-lg h-2 cursor-pointer">
                                 </div>
 
                                 <button onclick="clientSubmitBid()" id="btnSubmitBid" ${!currentChoice ? 'disabled' : ''} class="w-full py-3.5 rounded-xl font-black transition font-title text-base flex items-center justify-center gap-2 ${myTeam.submitted ? 'bg-emerald-700 text-emerald-100 cursor-default' : (currentChoice ? 'bg-amber-500 hover:bg-amber-400 text-slate-950 shadow-lg' : 'bg-slate-800 text-slate-500 cursor-not-allowed')}">
@@ -1488,7 +1407,6 @@
         };
 
         window.submitRescueAnswer = function(answer) {
-            // 회생 퀴즈 문제: "지표면 근처에서 마그마가 빨리 식어서 만들어진 화산암은 결정의 크기가 작다." -> 참(True)이 정답
             var isCorrect = (answer === true);
 
             if (isCorrect) {
@@ -1541,7 +1459,12 @@
 
             var display = document.getElementById('bidValueDisplay');
             if (display) {
-                display.innerText = val + ' pt';
+                var data = window.gameState.roomData;
+                var myTeamId = window.gameState.myTeamId;
+                var myTeam = data && data.teams ? data.teams[myTeamId] : null;
+                var maxPt = myTeam ? myTeam.points : 100;
+                var clampedVal = Math.min(parseInt(val), maxPt);
+                display.innerText = clampedVal + ' pt';
             }
         };
 
@@ -1549,13 +1472,38 @@
             playSound('click');
             var data = window.gameState.roomData;
             var myTeamId = window.gameState.myTeamId;
+            var myTeam = data.teams[myTeamId];
             
-            data.teams[myTeamId].choice = window.clientLocalInput.choice;
-            data.teams[myTeamId].currentBid = window.clientLocalInput.bid || 10;
-            data.teams[myTeamId].submitted = true;
+            if (!window.clientLocalInput.choice) {
+                window.showToast("참(O) 또는 거짓(X) 중 하나를 선택해 주세요!");
+                return;
+            }
+
+            if (!myTeam) {
+                window.showToast("모둠 정보가 올바르지 않습니다. 다시 접속해 주세요.");
+                return;
+            }
+
+            var rawBid = window.clientLocalInput.bid !== undefined ? window.clientLocalInput.bid : 5;
+            var finalBid = Math.min(rawBid, myTeam.points);
+            if (myTeam.points < finalBid) {
+                finalBid = myTeam.points; 
+            }
+
+            myTeam.choice = window.clientLocalInput.choice;
+            myTeam.currentBid = finalBid;
+            myTeam.submitted = true;
 
             if (window.db) {
-                window.getRoomDocRef(data.roomId).update({ teams: data.teams });
+                window.getRoomDocRef(data.roomId).update({ teams: data.teams })
+                .then(function() {
+                    window.showToast("✅ 투자가 성공적으로 제출되었습니다!");
+                    window.renderClientDashboard();
+                })
+                .catch(function(err) {
+                    console.error("투자 제출 에러:", err);
+                    window.showToast("❌ 제출 중 오류가 발생했습니다. 다시 시도해 주세요.");
+                });
             } else {
                 window.renderClientDashboard();
             }
@@ -1653,7 +1601,7 @@
 
                     <div class="glass-panel rounded-3xl p-6 space-y-4">
                         <h3 class="text-lg font-bold font-title text-amber-300 flex items-center gap-2">
-                            <i class="fa-solid fa-ranking-star"></i> 최종 순위표 (${data.mode === 'individual' ? '개별전 21명' : '모둠전'})
+                            <i class="fa-solid fa-ranking-star"></i> 최종 순위표 (1~5모둠전)
                         </h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[48vh] overflow-y-auto p-1">
                             ${teamsList.map(function(team, idx) {
@@ -1687,7 +1635,7 @@
         };
 
         window.finishClassAndClear = function() {
-            localStorage.removeItem('earth_strata_host_pin');
+            localStorage.removeItem('earth_strata_team_host_pin');
             if (window.hostPingInterval) clearInterval(window.hostPingInterval);
             if (window.roomUnsubscribe) {
                 window.roomUnsubscribe();
