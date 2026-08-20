@@ -10,10 +10,10 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&family=Noto+Sans+KR:wght@300;400;600;700;900&display=swap" rel="stylesheet">
-    <!-- Firebase Compat Scripts -->
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+    <!-- Firebase SDK (ES5/ES6 호환 LTS 버전 8.10.1) -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
     <style>
         body {
             font-family: 'Noto Sans KR', sans-serif;
@@ -86,50 +86,14 @@
         수업디자인 연수 오전 강의용 | 중학교 2학년 과학 [지권 문제 투자 시스템 - 모둠전]
     </footer>
 
-    <div id="sheriffModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
-        <div class="glass-panel bg-slate-900/90 border-2 border-amber-500/50 rounded-3xl p-6 md:p-8 max-w-lg w-full glow-effect relative transform transition-all duration-300 scale-95 opacity-0" id="sheriffModalCard">
-            <button onclick="closeSheriffModal()" class="absolute top-4 right-4 text-slate-400 hover:text-white w-8 h-8 rounded-full bg-slate-800 flex items-center justify-center">
-                <i class="fa-solid fa-xmark"></i>
-            </button>
-            <div class="flex items-center gap-3 text-amber-400 mb-4">
-                <i class="fa-solid fa-shield-halved text-3xl animate-bounce"></i>
-                <div>
-                    <h3 class="text-xl font-bold font-title text-amber-300">보안관 지식 검증 리포트</h3>
-                    <span class="text-xs text-amber-500/80" id="sheriffTeamName">모둠 비밀 힌트</span>
-                </div>
-            </div>
-            <hr class="border-slate-700/60 mb-4">
-            <div class="space-y-4 text-slate-200">
-                <div class="bg-amber-950/30 border border-amber-500/30 rounded-2xl p-4">
-                    <div class="text-xs text-amber-400 font-bold mb-1 flex items-center gap-1">
-                        <i class="fa-solid fa-magnifying-glass"></i> 핵심 트릭 포인트
-                    </div>
-                    <p class="text-sm md:text-base font-semibold text-amber-100" id="sheriffHintText">
-                        힌트 내용이 표시됩니다.
-                    </p>
-                </div>
-                <div class="bg-indigo-950/30 border border-indigo-500/30 rounded-2xl p-4">
-                    <div class="text-xs text-indigo-400 font-bold mb-1 flex items-center gap-1">
-                        <i class="fa-solid fa-book-open"></i> 관련 교과서 핵심 개념
-                    </div>
-                    <p class="text-xs md:text-sm text-slate-300" id="sheriffConceptText">
-                        교과서 개념이 표시됩니다.
-                    </p>
-                </div>
-            </div>
-            <button onclick="closeSheriffModal()" class="w-full mt-6 py-3 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold rounded-xl shadow-lg transition text-sm">
-                확인 완료
-            </button>
-        </div>
-    </div>
-
+    <!-- 대출 심사 퀴즈 모달 (다회차 가변 이율 적용) -->
     <div id="rescueQuizModal" class="fixed inset-0 bg-slate-950/80 backdrop-blur-md z-50 hidden flex items-center justify-center p-4">
         <div class="glass-panel bg-slate-900/90 border-2 border-emerald-500/50 rounded-3xl p-6 md:p-8 max-w-lg w-full glow-effect relative space-y-4">
             <div class="flex items-center gap-3 text-emerald-400">
-                <i class="fa-solid fa-kit-medical text-3xl animate-pulse"></i>
+                <i class="fa-solid fa-building-columns text-3xl animate-pulse"></i>
                 <div>
-                    <h3 class="text-xl font-bold font-title text-emerald-300">보안관 모둠 회생 개념 퀴즈 (1회 제한)</h3>
-                    <span class="text-xs text-emerald-500/80">모둠당 단 한번 제공되는 회생 기회입니다!</span>
+                    <h3 class="text-xl font-bold font-title text-emerald-300" id="rescueQuizTitle">대출 심사 개념 퀴즈</h3>
+                    <span class="text-xs text-emerald-400/90 font-semibold" id="loanRateSubtitle">희망 대출 액수를 선택하고 퀴즈를 맞추세요!</span>
                 </div>
             </div>
             <hr class="border-slate-700/60">
@@ -141,7 +105,18 @@
                 </p>
             </div>
 
-            <div class="grid grid-cols-2 gap-3 pt-2">
+            <div class="bg-slate-950/80 p-4 rounded-2xl border border-slate-800 space-y-2">
+                <div class="flex justify-between items-center text-xs text-slate-300">
+                    <span class="font-bold text-slate-300"><i class="fa-solid fa-hand-holding-dollar text-amber-400 mr-1"></i>희망 대출 신청 금액:</span>
+                    <span id="requestedLoanDisplay" class="text-amber-300 font-black text-base">50 pt</span>
+                </div>
+                <input type="range" id="requestedLoanRange" min="10" max="500" step="10" value="50" data-rate="1.1" oninput="updateLoanEstimate(this.value)" class="w-full accent-amber-500 bg-slate-800 rounded-lg h-2 cursor-pointer">
+                <p class="text-[11px] text-amber-300/90 font-medium">
+                    ⚠️ 상환 이율: <span id="currentLoanRateBadge" class="font-bold text-amber-400">110%</span> (상환 시 <span id="repaymentEstimateDisplay" class="font-bold text-amber-300">55</span> pt가 부채로 청구됩니다)
+                </p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-3 pt-1">
                 <button onclick="submitRescueAnswer(true)" class="py-3.5 rounded-2xl font-bold bg-slate-800 hover:bg-slate-700 border border-slate-700 text-emerald-400 text-base transition">
                     ⭕ O (그렇다)
                 </button>
@@ -173,8 +148,8 @@
         window.hostPingInterval = null;
         window.appId = 'earth-strata-investment-team';
 
-        let resolveAuthPromise;
-        window.authReady = new Promise((resolve) => {
+        var resolveAuthPromise;
+        window.authReady = new Promise(function(resolve) {
             resolveAuthPromise = resolve;
         });
 
@@ -184,141 +159,21 @@
         };
 
         window.questionBank = [
-            {
-                id: 1,
-                category: "지구계 구성 요소",
-                statement: "암석과 토양으로 이루어진 지표와 지구 내부를 통틀어 '지권'이라고 부른다.",
-                isTrue: true,
-                sheriffHint: "포인트: 땅과 지구 내부를 구성하는 영역의 명칭을 확인하세요.",
-                concept: "지권은 암석과 토양으로 이루어진 지표와 지구 내부를 포함합니다.",
-                explanation: "참(True)! 지권은 지구계의 구성 요소 중 암석과 토양으로 이루어진 지표와 내부를 뜻합니다."
-            },
-            {
-                id: 2,
-                category: "지구계 구성 요소",
-                statement: "태양이나 달 같은 우주 천체들은 지구계의 '기권'에 속한다.",
-                isTrue: false,
-                sheriffHint: "포인트: 기권은 지구 대기층이고, 지구 바깥 우주는 무엇일까요?",
-                concept: "기권 바깥의 우주와 태양, 달 등의 천체는 '외권'에 속합니다.",
-                explanation: "거짓(False)! 태양이나 달 같은 천체들은 기권 바깥의 우주인 '외권'에 속합니다."
-            },
-            {
-                id: 3,
-                category: "지구 내부 구조",
-                statement: "과학자들은 구멍을 직접 뚫는 시추법을 통해 지구 내부 전체의 층상 구조를 완벽하게 밝혀내었다.",
-                isTrue: false,
-                sheriffHint: "포인트: 사람이 직접 파고 내려가는 방법은 깊이의 한계가 있습니다. 어떤 파동을 이용할까요?",
-                concept: "시추법은 지표 부근만 알 수 있으며, 지구 내부 전체는 '지진파' 연구를 통해 밝혀냈습니다.",
-                explanation: "거짓(False)! 시추는 깊이의 한계가 있으며, 지구 내부 전체 구조는 '지진파' 분석을 통해 알아냈습니다."
-            },
-            {
-                id: 4,
-                category: "지권의 층상 구조",
-                statement: "지권의 층상 구조 중 지구 전체 부피의 약 80%를 차지하는 가장 두꺼운 층은 '맨틀'이다.",
-                isTrue: true,
-                sheriffHint: "포인트: 지각 아래에서 깊이 약 2900km까지 이어지는 거대한 부피의 층입니다.",
-                concept: "맨틀은 고체 상태로 지구 전체 부피의 약 80%를 차지합니다.",
-                explanation: "참(True)! 맨틀은 지각 아래부터 깊이 약 2900km까지이며 지구 전체 부피의 약 80%를 차지하는 유동성 고체 층입니다."
-            },
-            {
-                id: 5,
-                category: "지권의 층상 구조",
-                statement: "지구의 외핵은 액체 상태로 추정되며, 철과 니켈 같은 물질로 이루어져 있다.",
-                isTrue: true,
-                sheriffHint: "포인트: 외핵은 지진파가 통과하지 못하는 성질을 통해 물질의 상태를 유추했습니다.",
-                concept: "외핵은 깊이 약 2900km에서 5100km까지로 액체 상태로 추정됩니다.",
-                explanation: "참(True)! 외핵은 액체 상태로 추정되며 철과 니켈 등의 무거운 물질로 이루어져 있습니다."
-            },
-            {
-                id: 6,
-                category: "암석과 광물",
-                statement: "암석을 이루는 주된 알갱이들을 '조암 광물'이라고 부르며, 화강암 속에는 석영, 장석, 흑운모 등이 포함되어 있다.",
-                isTrue: true,
-                sheriffHint: "포인트: 밥(암석) 속에 들어있는 콩나물이나 고기(광물) 같은 알갱이들을 떠올려 보세요.",
-                concept: "암석을 이루는 주된 광물을 조암 광물(석영, 장석, 흑운모 등)이라고 합니다.",
-                explanation: "참(True)! 암석은 여러 광물 알갱이로 이루어져 있으며 대표적인 조암 광물로 석영, 장석, 흑운모 등이 있습니다."
-            },
-            {
-                id: 7,
-                category: "화성암의 생성",
-                statement: "마그마가 식어서 굳어진 암석을 '화성암'이라고 부른다.",
-                isTrue: true,
-                sheriffHint: "포인트: 불(火)과 관련된 탄생 비밀을 가진 암석입니다.",
-                concept: "마그마가 식어서 굳어진 암석을 화성암이라고 합니다.",
-                explanation: "참(True)! 마그마가 지하 깊은 곳이나 지표면 근처에서 식어서 굳어진 암석을 화성암이라고 합니다."
-            },
-            {
-                id: 8,
-                category: "화성암의 분류",
-                statement: "지표면 근처에서 마그마가 빨리 식어서 만들어진 화산암은 광물 결정(알갱이)의 크기가 매우 크고 뚜렷하다.",
-                isTrue: false,
-                sheriffHint: "포인트: 빨리 식으면 알갱이가 뭉칠 시간이 충분할까요, 부족할까요?",
-                concept: "빨리 식으면 결정이 뭉칠 시간이 부족하여 결정의 크기가 작습니다(화산암).",
-                explanation: "거짓(False)! 빨리 식으면 결정이 자랄 시간이 부족해 알갱이 크기가 작습니다. 결정이 큰 것은 천천히 식은 심성암입니다."
-            },
-            {
-                id: 9,
-                category: "화성암의 종류",
-                statement: "지하 깊은 곳에서 마그마가 천천히 식어서 만들어진 대표적인 심성암에는 '화강암'이 있다.",
-                isTrue: true,
-                sheriffHint: "포인트: 북한산이나 설악산 등에서 흔히 볼 수 있는 밝은색 암석입니다.",
-                concept: "화강암은 지하 깊은 곳에서 서서히 식어 만들어진 대표적인 심성암입니다.",
-                explanation: "참(True)! 화강암은 지하 깊은 곳에서 천천히 식어 광물 알갱이가 크고 뚜렷하게 발달한 심성암입니다."
-            },
-            {
-                id: 10,
-                category: "광물의 특성",
-                statement: "광물을 조흔판에 긁었을 때 나타나는 광물 가루의 색을 '조흔색'이라고 한다.",
-                isTrue: true,
-                sheriffHint: "포인트: 겉보기 색이 비슷한 광물을 구별할 때 가루 색을 이용합니다.",
-                concept: "조흔판에 긁었을 때의 가루 색을 조흔색이라고 합니다.",
-                explanation: "참(True)! 조흔색은 광물의 겉보기 색이 비슷할 때 진짜 가루 색을 확인하여 구별하는 유용한 특성입니다."
-            },
-            {
-                id: 11,
-                category: "광물의 특성",
-                statement: "자철석과 적철석은 겉보기 색이 모두 검은색이지만, 조흔색(가루 색)을 비교하면 서로 다르게 나타난다.",
-                isTrue: true,
-                sheriffHint: "포인트: 겉보기 색이 같아도 조흔색은 다를 수 있습니다.",
-                concept: "자철석은 검은색 조흔색, 적철석은 적갈색 조흔색을 가집니다.",
-                explanation: "참(True)! 자철석은 검은색 가루, 적철석은 적갈색 가루가 나와 조흔색으로 구별이 가능합니다."
-            },
-            {
-                id: 12,
-                category: "광물의 특성",
-                statement: "석영은 방해석보다 무르기 때문에 서로 긁었을 때 석영에 흠집이 생긴다.",
-                isTrue: false,
-                sheriffHint: "포인트: 단단한 광물이 무른 광물을 긁습니다. 유리를 긁을 수 있는 광물은 무엇일까요?",
-                concept: "석영이 방해석보다 더 단단하므로 방해석에 흠집이 생깁니다.",
-                explanation: "거짓(False)! 석영이 방해석보다 더 단단하기 때문에 두 광물을 긁으면 방해석에 흠집이 생깁니다."
-            },
-            {
-                id: 13,
-                category: "광물의 특성",
-                statement: "방해석에 묽은 염산을 떨어뜨리면 반응하여 거품(이산화 탄소 기체)이 발생한다.",
-                isTrue: true,
-                sheriffHint: "포인트: 석회암 성분(탄산칼슘)을 가진 광물과 염산의 반응을 떠올려 보세요.",
-                concept: "방해석은 묽은 염산과 반응하여 거품을 발생시키는 특징이 있습니다.",
-                explanation: "참(True)! 방해석은 염산과 반응해 거품을 내는 뚜렷한 성질이 있어 다른 광물과 쉽게 구별됩니다."
-            },
-            {
-                id: 14,
-                category: "광물의 특성",
-                statement: "자철석은 철 성분을 포함하고 있어 클립이나 쇠못을 끌어당기는 '자성'을 띤다.",
-                isTrue: true,
-                sheriffHint: "포인트: 이름 안에 자석(磁)의 성질이 들어있습니다.",
-                concept: "자철석은 쇠붙이를 끌어당기는 자성을 가집니다.",
-                explanation: "참(True)! 자철석은 이름 그대로 자성을 띠어 쇠붙이(클립 등)를 끌어당깁니다."
-            },
-            {
-                id: 15,
-                category: "화성암의 분류",
-                statement: "화성암은 주로 '암석의 색깔'과 '광물 결정(알갱이)의 크기' 두 가지 기준을 통해 분류한다.",
-                isTrue: true,
-                sheriffHint: "포인트: 지질학자들이 화성암을 분류할 때 사용하는 핵심 기준 두 가지입니다.",
-                concept: "화성암은 색(밝은색/어두운색)과 결정의 크기(화산암/심성암)로 분류합니다.",
-                explanation: "참(True)! 지질학자들은 암석의 색깔과 결정의 크기를 기준으로 화성암을 체계적으로 분류합니다."
-            }
+            { id: 1, category: "지구계 구성 요소", statement: "암석과 토양으로 이루어진 지표와 지구 내부를 통틀어 '지권'이라고 부른다.", isTrue: true, explanation: "참(True)! 지권은 지구계의 구성 요소 중 암석과 토양으로 이루어진 지표와 내부를 뜻합니다." },
+            { id: 2, category: "지구계 구성 요소", statement: "태양이나 달 같은 우주 천체들은 지구계의 '기권'에 속한다.", isTrue: false, explanation: "거짓(False)! 태양이나 달 같은 천체들은 기권 바깥의 우주인 '외권'에 속합니다." },
+            { id: 3, category: "지구 내부 구조", statement: "과학자들은 구멍을 직접 뚫는 시추법을 통해 지구 내부 전체의 층상 구조를 완벽하게 밝혀내었다.", isTrue: false, explanation: "거짓(False)! 시추는 깊이의 한계가 있으며, 지구 내부 전체 구조는 '지진파' 분석을 통해 알아냈습니다." },
+            { id: 4, category: "지권의 층상 구조", statement: "지권의 층상 구조 중 지구 전체 부피의 약 80%를 차지하는 가장 두꺼운 층은 '맨틀'이다.", isTrue: true, explanation: "참(True)! 맨틀은 지각 아래부터 깊이 약 2900km까지이며 지구 전체 부피의 약 80%를 차지하는 유동성 고체 층입니다." },
+            { id: 5, category: "지권의 층상 구조", statement: "지구의 외핵은 액체 상태로 추정되며, 철과 니켈 같은 물질로 이루어져 있다.", isTrue: true, explanation: "참(True)! 외핵은 액체 상태로 추정되며 철과 니켈 등의 무거운 물질로 이루어져 있습니다." },
+            { id: 6, category: "암석과 광물", statement: "암석을 이루는 주된 알갱이들을 '조암 광물'이라고 부르며, 화강암 속에는 석영, 장석, 흑운모 등이 포함되어 있다.", isTrue: true, explanation: "참(True)! 암석은 여러 광물 알갱이로 이루어져 있으며 대표적인 조암 광물로 석영, 장석, 흑운모 등이 있습니다." },
+            { id: 7, category: "화성암의 생성", statement: "마그마가 식어서 굳어진 암석을 '화성암'이라고 부른다.", isTrue: true, explanation: "참(True)! 마그마가 지하 깊은 곳이나 지표면 근처에서 식어서 굳어진 암석을 화성암이라고 합니다." },
+            { id: 8, category: "화성암의 분류", statement: "지표면 근처에서 마그마가 빨리 식어서 만들어진 화산암은 광물 결정(알갱이)의 크기가 매우 크고 뚜렷하다.", isTrue: false, explanation: "거짓(False)! 빨리 식으면 결정이 자랄 시간이 부족해 알갱이 크기가 작습니다. 결정이 큰 것은 천천히 식은 심성암입니다." },
+            { id: 9, category: "화성암의 종류", statement: "지하 깊은 곳에서 마그마가 천천히 식어서 만들어진 대표적인 심성암에는 '화강암'이 있다.", isTrue: true, explanation: "참(True)! 화강암은 지하 깊은 곳에서 천천히 식어 광물 알갱이가 크고 뚜렷하게 발달한 심성암입니다." },
+            { id: 10, category: "광물의 특성", statement: "광물을 조흔판에 긁었을 때 나타나는 광물 가루의 색을 '조흔색'이라고 한다.", isTrue: true, explanation: "참(True)! 조흔색은 광물의 겉보기 색이 비슷할 때 진짜 가루 색을 확인하여 구별하는 유용한 특성입니다." },
+            { id: 11, category: "광물의 특성", statement: "자철석과 적철석은 겉보기 색이 모두 검은색이지만, 조흔색(가루 색)을 비교하면 서로 다르게 나타난다.", isTrue: true, explanation: "참(True)! 자철석은 검은색 가루, 적철석은 적갈색 가루가 나와 조흔색으로 구별이 가능합니다." },
+            { id: 12, category: "광물의 특성", statement: "석영은 방해석보다 무르기 때문에 서로 긁었을 때 석영에 흠집이 생긴다.", isTrue: false, explanation: "거짓(False)! 석영이 방해석보다 더 단단하기 때문에 두 광물을 긁으면 방해석에 흠집이 생깁니다." },
+            { id: 13, category: "광물의 특성", statement: "방해석에 묽은 염산을 떨어뜨리면 반응하여 거품(이산화 탄소 기체)이 발생한다.", isTrue: true, explanation: "참(True)! 방해석은 염산과 반응해 거품을 내는 뚜렷한 성질이 있어 다른 광물과 쉽게 구별됩니다." },
+            { id: 14, category: "광물의 특성", statement: "자철석은 철 성분을 포함하고 있어 클립이나 쇠못을 끌어당기는 '자성'을 띤다.", isTrue: true, explanation: "참(True)! 자철석은 이름 그대로 자성을 띠어 쇠붙이(클립 등)를 끌어당깁니다." },
+            { id: 15, category: "화성암의 분류", statement: "화성암은 주로 '암석의 색깔'과 '광물 결정(알갱이)의 크기' 두 가지 기준을 통해 분류한다.", isTrue: true, explanation: "참(True)! 지질학자들은 암석의 색깔과 결정의 크기를 기준으로 화성암을 체계적으로 분류합니다." }
         ];
 
         window.showToast = function(msg) {
@@ -329,7 +184,7 @@
                 toast.className = 'fixed top-5 left-1/2 -translate-x-1/2 z-50 bg-amber-600 text-white font-bold px-5 py-3 rounded-2xl shadow-2xl border border-amber-400 text-sm transition-all duration-300 opacity-0 pointer-events-none flex items-center gap-2';
                 document.body.appendChild(toast);
             }
-            toast.innerHTML = `<i class="fa-solid fa-circle-info"></i> <span>${msg}</span>`;
+            toast.innerHTML = '<i class="fa-solid fa-circle-info"></i> <span>' + msg + '</span>';
             toast.classList.remove('opacity-0', 'pointer-events-none');
             setTimeout(function() {
                 toast.classList.add('opacity-0', 'pointer-events-none');
@@ -400,14 +255,6 @@
                     gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
                     osc.start(now);
                     osc.stop(now + 0.08);
-                } else if (type === 'sheriff') {
-                    osc.type = 'triangle';
-                    osc.frequency.setValueAtTime(440, now);
-                    osc.frequency.exponentialRampToValueAtTime(880, now + 0.25);
-                    gain.gain.setValueAtTime(0.15, now);
-                    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.3);
-                    osc.start(now);
-                    osc.stop(now + 0.3);
                 } else if (type === 'correct') {
                     osc.type = 'sine';
                     osc.frequency.setValueAtTime(523.25, now);
@@ -435,23 +282,22 @@
         };
 
         window.exitToHome = function() {
-            if (confirm("메인 화면으로 돌아가시겠습니까? (진행 중인 모둠 투자 정보는 보존됩니다)")) {
-                if (window.hostPingInterval) clearInterval(window.hostPingInterval);
-                
-                if (window.gameState.role === 'host' && window.db && window.gameState.roomId) {
-                    window.getRoomDocRef(window.gameState.roomId).update({ hostActive: false });
-                }
-
-                if (window.roomUnsubscribe) {
-                    window.roomUnsubscribe();
-                    window.roomUnsubscribe = null;
-                }
-
-                window.gameState.role = null;
-                window.gameState.roomId = null;
-                document.getElementById('roomPinBadge').classList.add('hidden');
-                window.renderRoleSelection();
+            if (window.hostPingInterval) clearInterval(window.hostPingInterval);
+            
+            if (window.gameState.role === 'host' && window.db && window.gameState.roomId) {
+                window.getRoomDocRef(window.gameState.roomId).update({ hostActive: false });
             }
+
+            if (window.roomUnsubscribe) {
+                window.roomUnsubscribe();
+                window.roomUnsubscribe = null;
+            }
+
+            window.gameState.role = null;
+            window.gameState.roomId = null;
+            document.getElementById('roomPinBadge').classList.add('hidden');
+            window.renderRoleSelection();
+            window.showToast("메인 화면으로 돌아왔습니다.");
         };
 
         window.renderRoleSelection = function() {
@@ -542,12 +388,14 @@
         window.startHostHeartbeat = function(pin) {
             if (window.hostPingInterval) clearInterval(window.hostPingInterval);
 
-            window.hostPingInterval = setInterval(() => {
+            window.hostPingInterval = setInterval(function() {
                 if (window.gameState.role === 'host' && window.db) {
                     window.getRoomDocRef(pin).update({
                         hostActive: true,
                         lastHostPing: Date.now()
-                    }).catch(err => console.warn("Heartbeat update error:", err));
+                    }).catch(function(err) {
+                        console.warn("Heartbeat update error:", err);
+                    });
                 }
             }, 3000);
 
@@ -558,7 +406,8 @@
             });
         };
 
-        window.checkPinAndLoadTeams = async function(retryCount = 0) {
+        window.checkPinAndLoadTeams = async function(retryCount) {
+            if (typeof retryCount === 'undefined') retryCount = 0;
             await window.authReady;
 
             var pinInput = document.getElementById('joinPinInput');
@@ -578,7 +427,7 @@
             }
 
             statusDiv.className = "text-[11px] mt-1 text-indigo-300 text-center font-bold";
-            statusDiv.innerText = retryCount > 0 ? `🔍 방 정보를 검색 중입니다 (${retryCount}/3)...` : "🔍 방 정보 확인 중...";
+            statusDiv.innerText = retryCount > 0 ? "🔍 방 정보를 검색 중입니다 (" + retryCount + "/3)..." : "🔍 방 정보 확인 중...";
 
             if (window.db) {
                 try {
@@ -589,7 +438,7 @@
                         statusDiv.innerText = "✅ 방 확인 완료 (1~5모둠전)";
                         window.updateJoinSelectOptions(room);
                     } else if (retryCount < 2) {
-                        setTimeout(() => window.checkPinAndLoadTeams(retryCount + 1), 800);
+                        setTimeout(function() { window.checkPinAndLoadTeams(retryCount + 1); }, 800);
                     } else {
                         statusDiv.className = "text-[11px] mt-1 text-rose-400 text-center font-bold";
                         statusDiv.innerText = "❌ 존재하지 않는 PIN 번호입니다.";
@@ -669,7 +518,7 @@
 
                         window.startHostHeartbeat(pin);
                         window.renderHostScreen();
-                        window.showToast(`🎉 PIN ${pin}번 모둠방에 교사 권한으로 복귀했습니다!`);
+                        window.showToast("🎉 PIN " + pin + "번 모둠방에 교사 권한으로 복귀했습니다!");
                         return;
                     }
                 } catch (err) {
@@ -700,14 +549,14 @@
                     id: key,
                     name: name,
                     points: 100,
-                    sheriffChances: 2,
                     currentBid: 5,
                     choice: null,
                     submitted: false,
                     joined: false,
-                    sheriffModalData: null,
                     rescueRequested: false,
-                    rescueUsed: false
+                    requestedLoanAmount: 50,
+                    debt: 0,
+                    loanCount: 0
                 };
             }
 
@@ -912,13 +761,16 @@
                         ${teamsList.map(function(t) {
                             var isZero = t.points <= 0;
                             var isRescueRequested = t.rescueRequested;
+                            var debt = t.debt || 0;
+                            var loanAttemptCount = (t.loanCount || 0) + 1;
+                            var currentRate = 100 + (loanAttemptCount * 10);
 
                             return `
                                 <div class="glass-panel rounded-2xl p-3.5 border ${isRescueRequested ? 'border-amber-400 bg-amber-950/40 animate-pulse' : (isZero ? 'border-rose-500/80 bg-rose-950/30' : (data.isRevealed ? ( t.submitted && ((t.choice === 'True' && q.isTrue) || (t.choice === 'False' && !q.isTrue)) ? 'border-emerald-500 bg-emerald-950/30' : 'border-rose-500 bg-rose-950/30' ) : (t.submitted ? 'border-amber-500/60 bg-amber-950/30' : 'border-slate-800 bg-slate-900/40')))} space-y-2 transition">
                                     <div class="flex justify-between items-center">
                                         <span class="font-black text-sm text-slate-100 font-title">${t.name}</span>
                                         <span class="text-[10px] px-2 py-0.5 rounded font-bold ${isRescueRequested ? 'bg-amber-400 text-slate-950 font-black' : (isZero ? 'bg-rose-500/20 text-rose-300 border border-rose-500/40' : (t.submitted ? 'bg-emerald-500/20 text-emerald-300 border border-emerald-500/30' : 'bg-slate-800 text-slate-500'))}">
-                                            ${isRescueRequested ? '🆘 회생요청' : (isZero ? '파산' : (t.submitted ? '투자완료✓' : '대기'))}
+                                            ${isRescueRequested ? `💳 ${loanAttemptCount}회차 대출` : (isZero ? '파산' : (t.submitted ? '투자완료✓' : '대기'))}
                                         </span>
                                     </div>
 
@@ -927,6 +779,12 @@
                                             <span>자본</span>
                                             <span class="${isZero ? 'text-rose-400 font-black' : 'text-emerald-400 font-bold'}">${t.points}p</span>
                                         </div>
+                                        ${debt > 0 ? `
+                                            <div class="flex justify-between text-amber-400 font-bold">
+                                                <span>대출 잔액</span>
+                                                <span>${debt}p</span>
+                                            </div>
+                                        ` : ''}
                                         <div class="flex justify-between text-slate-400">
                                             <span>투자</span>
                                             <span class="text-amber-300 font-bold">${t.submitted ? t.currentBid + 'p' : '-'}</span>
@@ -945,10 +803,21 @@
                                     </div>
 
                                     ${isRescueRequested ? `
-                                        <button onclick="approveRescueByHost('${t.id}')" class="w-full py-1.5 mt-1 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black rounded-xl text-xs shadow transition flex items-center justify-center gap-1">
-                                            <i class="fa-solid fa-gift"></i>
-                                            <span>지원금 지급 (+40p)</span>
-                                        </button>
+                                        <div class="bg-amber-950/60 p-2 rounded-xl border border-amber-500/40 space-y-1.5">
+                                            <div class="text-[11px] text-amber-300 font-bold flex justify-between">
+                                                <span>${loanAttemptCount}회차 (이율 ${currentRate}%):</span>
+                                                <span class="font-black text-amber-200">${t.requestedLoanAmount || 50}pt</span>
+                                            </div>
+                                            <div class="flex items-center gap-1">
+                                                <span class="text-[10px] text-slate-400 shrink-0">승인액:</span>
+                                                <input type="number" id="hostLoanAmt_${t.id}" value="${t.requestedLoanAmount || 50}" min="10" max="500" step="10" class="w-full bg-slate-950 border border-slate-700 rounded px-1.5 py-0.5 text-center text-xs font-bold text-amber-300 focus:outline-none focus:border-amber-400">
+                                                <span class="text-[10px] text-slate-400 shrink-0">pt</span>
+                                            </div>
+                                            <button onclick="approveRescueByHost('${t.id}')" class="w-full py-1 bg-gradient-to-r from-amber-400 to-amber-500 hover:from-amber-300 hover:to-amber-400 text-slate-950 font-black rounded-lg text-xs shadow transition flex items-center justify-center gap-1">
+                                                <i class="fa-solid fa-hand-holding-dollar"></i>
+                                                <span>${loanAttemptCount}회차 대출 승인</span>
+                                            </button>
+                                        </div>
                                     ` : ''}
                                 </div>
                             `;
@@ -990,7 +859,7 @@
                 } else {
                     window.renderHostScreen();
                 }
-                window.showToast(`⚙️ ${team.name}의 자본금이 ${amount > 0 ? '+' + amount : amount} pt 조정되었습니다.`);
+                window.showToast("⚙️ " + team.name + "의 자본금이 " + (amount > 0 ? '+' + amount : amount) + " pt 조정되었습니다.");
             }
         };
 
@@ -1000,22 +869,25 @@
             
             if (data.teams && data.teams[targetTeamId]) {
                 var team = data.teams[targetTeamId];
-                if (!team.rescueUsed) {
-                    team.points += 40;
-                    team.rescueUsed = true;
-                    team.rescueRequested = false;
+                var inputElem = document.getElementById('hostLoanAmt_' + targetTeamId);
+                var rawVal = inputElem ? parseInt(inputElem.value) : (team.requestedLoanAmount || 50);
+                var approvedAmount = Math.max(10, Math.round(rawVal / 10) * 10);
+                
+                var loanAttempt = (team.loanCount || 0) + 1;
+                var rate = 1.0 + (loanAttempt * 0.1);
+                var debtForThisLoan = Math.round(approvedAmount * rate);
 
-                    if (window.db) {
-                        window.getRoomDocRef(data.roomId).update({ teams: data.teams });
-                    } else {
-                        window.renderHostScreen();
-                    }
-                    window.showToast(`🎉 ${team.name}에게 지원금 +40 pt가 지급되었습니다!`);
-                } else {
-                    team.rescueRequested = false;
+                team.points += approvedAmount;
+                team.debt = (team.debt || 0) + debtForThisLoan;
+                team.loanCount = loanAttempt;
+                team.rescueRequested = false;
+
+                if (window.db) {
                     window.getRoomDocRef(data.roomId).update({ teams: data.teams });
-                    window.showToast(`⚠️ ${team.name}은 이미 이번 수업에서 회생 기회를 사용했습니다.`);
+                } else {
+                    window.renderHostScreen();
                 }
+                window.showToast("🎉 " + team.name + "에게 " + loanAttempt + "회차 대출금 +" + approvedAmount + " pt가 지급되었습니다! (대출 상환금: " + debtForThisLoan + " pt / 총 부채: " + team.debt + " pt)");
             }
         };
 
@@ -1079,7 +951,6 @@
                     t.choice = null;
                     t.currentBid = Math.min(5, t.points);
                     t.submitted = false;
-                    t.sheriffModalData = null;
                 });
 
                 if (window.db) {
@@ -1142,7 +1013,6 @@
                         if (snap.exists) {
                             window.gameState.roomData = snap.data();
                             window.renderClientDashboard();
-                            window.checkSheriffModalState();
                         }
                     }, function(error) {
                         console.error("Snapshot error:", error);
@@ -1158,7 +1028,7 @@
                     for (var i = 1; i <= 5; i++) {
                         var key = i.toString();
                         initialParticipants[key] = {
-                            id: key, name: `${i}모둠`, points: 100, sheriffChances: 2, currentBid: 5, choice: null, submitted: false, joined: false, sheriffModalData: null, rescueRequested: false, rescueUsed: false
+                            id: key, name: `${i}모둠`, points: 100, currentBid: 5, choice: null, submitted: false, joined: false, rescueRequested: false, debt: 0, loanCount: 0
                         };
                     }
                     window.gameState.roomData = {
@@ -1184,7 +1054,7 @@
             var container = document.getElementById('appContainer');
             var data = window.gameState.roomData;
             var myTeamId = window.gameState.myTeamId;
-            var myTeam = (data && data.teams && data.teams[myTeamId]) ? data.teams[myTeamId] : { name: myTeamId + '모둠', points: 100, currentBid: 5, choice: null, submitted: false, sheriffChances: 2, joined: true, rescueRequested: false, rescueUsed: false };
+            var myTeam = (data && data.teams && data.teams[myTeamId]) ? data.teams[myTeamId] : { name: myTeamId + '모둠', points: 100, currentBid: 5, choice: null, submitted: false, joined: true, rescueRequested: false, debt: 0, loanCount: 0 };
 
             if (!data) return;
 
@@ -1234,9 +1104,6 @@
                                 <div class="text-xs text-amber-300 font-bold flex items-center gap-1.5">
                                     <i class="fa-solid fa-coins"></i> 초기 투자 자본: <span class="text-emerald-400 font-black text-sm">${myTeam.points} pt</span>
                                 </div>
-                                <div class="text-xs text-amber-300 font-bold flex items-center gap-1.5">
-                                    <i class="fa-solid fa-shield-halved"></i> 보유 보안관 찬스: <span class="text-amber-400 font-black text-sm">${myTeam.sheriffChances}회</span>
-                                </div>
                                 <hr class="border-slate-800 my-2">
                                 <p class="text-xs text-slate-400 leading-relaxed">
                                     💡 선생님이 스크린 화면에서 <span class="text-amber-300 font-bold">'지권 문제 투자 시작하기'</span>를 누르면 첫 번째 문제가 나타납니다.
@@ -1254,8 +1121,14 @@
             }
 
             if (data.status === 'debriefing') {
-                var teamsList = Object.values(data.teams).sort(function(a, b) { return b.points - a.points; });
+                var teamsList = Object.values(data.teams).sort(function(a, b) { 
+                    var scoreA = Math.max(0, a.points - (a.debt || 0));
+                    var scoreB = Math.max(0, b.points - (b.debt || 0));
+                    return scoreB - scoreA; 
+                });
                 var myRank = teamsList.findIndex(function(t) { return t.id === myTeamId; }) + 1;
+                var myDebt = myTeam.debt || 0;
+                var netScore = Math.max(0, myTeam.points - myDebt);
 
                 container.innerHTML = `
                     <div class="max-w-md mx-auto w-full space-y-4 my-auto text-center p-4">
@@ -1267,7 +1140,12 @@
                             <div class="bg-slate-950/80 p-4 rounded-2xl border border-slate-800 space-y-2">
                                 <div class="text-xs text-slate-400">${myTeam.name}의 최종 결과</div>
                                 <div class="text-3xl font-black text-amber-300 font-title">${myRank}위</div>
-                                <div class="text-emerald-400 font-bold text-lg">${myTeam.points} pt</div>
+                                <div class="text-emerald-400 font-bold text-lg">${netScore} pt</div>
+                                ${myDebt > 0 ? `
+                                    <div class="text-[11px] text-rose-400">
+                                        (보유 ${myTeam.points}p - 미상환 대출 ${myDebt}p)
+                                    </div>
+                                ` : ''}
                             </div>
                             <p class="text-xs text-slate-300">선생님의 디브리핑 설명을 경청해 주세요!</p>
                         </div>
@@ -1278,8 +1156,10 @@
 
             var q = window.questionBank[data.currentQuestionIdx];
             var currentChoice = window.clientLocalInput.choice;
+            var debt = myTeam.debt || 0;
+            var nextLoanCount = (myTeam.loanCount || 0) + 1;
+            var nextLoanRate = 100 + (nextLoanCount * 10);
             
-            // 📌 5포인트 단위 베팅 및 남은 포인트가 5pt, 10pt일 때 슬라이더가 막히지 않도록 안전하게 동적 계산
             var maxPt = myTeam.points;
             var minPt = maxPt >= 5 ? 5 : 0;
             var currentBid = window.clientLocalInput.bid !== undefined ? window.clientLocalInput.bid : Math.min(5, maxPt);
@@ -1304,7 +1184,7 @@
                             </span>
                             <div>
                                 <span class="font-bold text-base text-slate-100 font-title">${myTeam.name}</span>
-                                <div class="text-[11px] text-slate-400">투자 참여 중</div>
+                                <div class="text-[11px] text-slate-400">${myTeam.loanCount > 0 ? '대출 ' + myTeam.loanCount + '회 이용 중' : '투자 참여 중'}</div>
                             </div>
                         </div>
                         <div class="text-right">
@@ -1312,6 +1192,21 @@
                             <div id="clientMyPointsDisplay" class="${isBankrupt ? 'text-rose-400 font-black' : 'text-emerald-400 font-black'} text-xl"><i class="fa-solid fa-coins text-amber-400 mr-1"></i>${myTeam.points} pt</div>
                         </div>
                     </div>
+
+                    ${debt > 0 ? `
+                        <div class="glass-panel rounded-2xl p-3.5 border border-amber-500/50 bg-amber-950/30 flex justify-between items-center gap-2">
+                            <div>
+                                <div class="text-xs text-amber-300 font-bold flex items-center gap-1">
+                                    <i class="fa-solid fa-building-columns"></i> 대출 잔액 (총 부채):
+                                </div>
+                                <div class="text-sm font-black text-rose-300">${debt} pt</div>
+                            </div>
+                            <button onclick="clientRepayLoan()" class="px-4 py-2 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-black rounded-xl text-xs shadow-md transition flex items-center gap-1.5">
+                                <i class="fa-solid fa-receipt"></i>
+                                <span>대출 상환하기</span>
+                            </button>
+                        </div>
+                    ` : ''}
 
                     <div class="glass-panel rounded-2xl p-5 text-center space-y-3">
                         <span class="text-xs font-bold px-3 py-1 rounded-full bg-amber-500/20 text-amber-300 border border-amber-400/30">
@@ -1331,10 +1226,10 @@
                                     <div class="w-12 h-12 rounded-2xl bg-amber-500/20 text-amber-300 border border-amber-400/30 flex items-center justify-center text-2xl mx-auto">
                                         <i class="fa-solid fa-hourglass-half fa-spin"></i>
                                     </div>
-                                    <h3 class="text-lg font-black font-title text-amber-300">구제 요청 제출 완료!</h3>
+                                    <h3 class="text-lg font-black font-title text-amber-300">${nextLoanCount}회차 대출 신청 제출 완료!</h3>
                                     <p class="text-xs text-slate-300 leading-relaxed">
-                                        회생 퀴즈를 맞췄습니다!<br>
-                                        선생님이 전면 스크린에서 <strong class="text-amber-400">'지원금 지급'</strong> 버튼을 누르시면 +40 pt를 받고 투자에 복귀합니다.
+                                        대출 심사 퀴즈를 맞췄습니다!<br>
+                                        선생님이 전면 스크린에서 <strong class="text-amber-400">'${nextLoanCount}회차 대출 승인'</strong> 버튼을 누르시면 대출금을 받고 투자에 복귀합니다.
                                     </p>
                                 </div>
                             ` : `
@@ -1342,23 +1237,18 @@
                                     <div class="text-4xl">💸</div>
                                     <div>
                                         <h3 class="text-xl font-black font-title text-rose-300">자금이 모두 소진되었습니다!</h3>
-                                        <p class="text-xs text-slate-300 mt-1">${myTeam.rescueUsed ? '이미 이번 수업의 구제 기회를 모두 사용하셨습니다.' : '간단한 회생 퀴즈를 맞추고 선생님께 지원금을 신청하세요.'}</p>
+                                        <p class="text-xs text-slate-300 mt-1">대출 심사 퀴즈를 맞추면 <strong>${nextLoanCount}회차 대출 (상환율 ${nextLoanRate}%)</strong>을 신청할 수 있습니다.</p>
                                     </div>
-                                    ${!myTeam.rescueUsed ? `
-                                        <button onclick="openRescueQuizModal()" class="w-full py-4 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-black rounded-2xl shadow-xl transition font-title text-base flex items-center justify-center gap-2 badge-glow">
-                                            <i class="fa-solid fa-file-pen text-lg"></i>
-                                            <span>보안관 회생 퀴즈 도전하기 (+40 pt 신청)</span>
-                                        </button>
-                                    ` : ''}
+                                    <button onclick="openRescueQuizModal()" class="w-full py-4 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-slate-950 font-black rounded-2xl shadow-xl transition font-title text-base flex items-center justify-center gap-2 badge-glow">
+                                        <i class="fa-solid fa-file-pen text-lg"></i>
+                                        <span>${nextLoanCount}회차 대출 퀴즈 도전 (이율 ${nextLoanRate}%)</span>
+                                    </button>
                                 </div>
                             `}
                         ` : `
                             <div id="clientBiddingForm" class="glass-panel rounded-2xl p-5 space-y-4 border border-amber-500/30">
                                 <div class="flex justify-between items-center">
                                     <h3 class="font-bold text-sm text-slate-300 font-title"><i class="fa-solid fa-gavel text-amber-400 mr-2"></i>참/거짓 및 투자 금액 선택 (5포인트 단위)</h3>
-                                    <button onclick="clientUseSheriffChance()" id="sheriffBtn" ${myTeam.sheriffChances <= 0 || myTeam.submitted ? 'disabled' : ''} class="px-2.5 py-1.5 rounded-xl border text-xs font-bold transition ${myTeam.sheriffChances > 0 && !myTeam.submitted ? 'bg-amber-500/20 hover:bg-amber-500/30 border-amber-500/40 text-amber-300 badge-glow' : 'bg-slate-800/50 border-slate-700 text-slate-600 cursor-not-allowed'}">
-                                        <i class="fa-solid fa-shield-halved text-amber-400 mr-1"></i>보안관 찬스 (<span id="sheriffCount">${myTeam.sheriffChances}</span>)
-                                    </button>
                                 </div>
 
                                 <div class="grid grid-cols-2 gap-3">
@@ -1402,8 +1292,63 @@
         };
 
         window.openRescueQuizModal = function() {
-            playSound('sheriff');
+            playSound('click');
+            var data = window.gameState.roomData;
+            var myTeamId = window.gameState.myTeamId;
+            var myTeam = data ? data.teams[myTeamId] : null;
+
+            var loanCount = myTeam ? (myTeam.loanCount || 0) : 0;
+            var nextAttempt = loanCount + 1;
+            var ratePercent = 100 + (nextAttempt * 10);
+            var rateMultiplier = 1.0 + (nextAttempt * 0.1);
+
+            var titleElem = document.getElementById('rescueQuizTitle');
+            var rateBadge = document.getElementById('currentLoanRateBadge');
+            var rangeElem = document.getElementById('requestedLoanRange');
+
+            if (titleElem) titleElem.innerText = "대출 심사 개념 퀴즈 (" + nextAttempt + "회차 대출)";
+            if (rateBadge) rateBadge.innerText = ratePercent + "%";
+            if (rangeElem) {
+                rangeElem.dataset.rate = rateMultiplier.toFixed(2);
+                window.updateLoanEstimate(rangeElem.value);
+            }
+
             document.getElementById('rescueQuizModal').classList.remove('hidden');
+        };
+
+        window.updateLoanEstimate = function(val) {
+            var rangeElem = document.getElementById('requestedLoanRange');
+            var rate = rangeElem && rangeElem.dataset.rate ? parseFloat(rangeElem.dataset.rate) : 1.1;
+
+            var display = document.getElementById('requestedLoanDisplay');
+            var estDisplay = document.getElementById('repaymentEstimateDisplay');
+            if (display) display.innerText = val + ' pt';
+            if (estDisplay) estDisplay.innerText = Math.round(parseInt(val) * rate);
+        };
+
+        window.clientRepayLoan = function() {
+            var data = window.gameState.roomData;
+            var myTeamId = window.gameState.myTeamId;
+            var myTeam = data ? data.teams[myTeamId] : null;
+
+            if (!myTeam || !myTeam.debt || myTeam.debt <= 0) return;
+
+            if (myTeam.points < myTeam.debt) {
+                window.showToast("❌ 자본금이 부족하여 대출을 상환할 수 없습니다. (필요: " + myTeam.debt + " pt / 보유: " + myTeam.points + " pt)");
+                return;
+            }
+
+            playSound('correct');
+            myTeam.points -= myTeam.debt;
+            var repaidAmt = myTeam.debt;
+            myTeam.debt = 0;
+
+            if (window.db) {
+                window.getRoomDocRef(data.roomId).update({ teams: data.teams });
+            } else {
+                window.renderClientDashboard();
+            }
+            window.showToast("🎉 대출금 " + repaidAmt + " pt를 성공적으로 전액 상환했습니다!");
         };
 
         window.submitRescueAnswer = function(answer) {
@@ -1415,15 +1360,19 @@
                 
                 var data = window.gameState.roomData;
                 var myTeamId = window.gameState.myTeamId;
-                
+                var loanRange = document.getElementById('requestedLoanRange');
+                var reqAmount = loanRange ? parseInt(loanRange.value) : 50;
+
                 data.teams[myTeamId].rescueRequested = true;
+                data.teams[myTeamId].requestedLoanAmount = reqAmount;
 
                 if (window.db) {
                     window.getRoomDocRef(data.roomId).update({ teams: data.teams });
                 } else {
                     window.renderClientDashboard();
                 }
-                window.showToast("✅ 회생 퀴즈 정답! 선생님에게 지원금 신청이 제출되었습니다.");
+                var attemptNum = ((data.teams[myTeamId].loanCount || 0) + 1);
+                window.showToast("✅ 대출 심사 퀴즈 정답! 선생님에게 " + attemptNum + "회차 대출 신청(" + reqAmount + "pt)이 제출되었습니다.");
             } else {
                 playSound('wrong');
                 window.showToast("❌ 오답입니다! 지표면 근처에서 빨리 식으면 알갱이가 뭉칠 시간이 부족해 결정이 작아집니다(화산암). 다시 도전하세요.");
@@ -1495,85 +1444,15 @@
             myTeam.submitted = true;
 
             if (window.db) {
-                window.getRoomDocRef(data.roomId).update({ teams: data.teams })
-                .then(function() {
+                window.getRoomDocRef(data.roomId).update({ teams: data.teams }).then(function() {
                     window.showToast("✅ 투자가 성공적으로 제출되었습니다!");
                     window.renderClientDashboard();
-                })
-                .catch(function(err) {
+                }).catch(function(err) {
                     console.error("투자 제출 에러:", err);
                     window.showToast("❌ 제출 중 오류가 발생했습니다. 다시 시도해 주세요.");
                 });
             } else {
                 window.renderClientDashboard();
-            }
-        };
-
-        window.clientUseSheriffChance = function() {
-            var data = window.gameState.roomData;
-            var myTeamId = window.gameState.myTeamId;
-            var myTeam = data.teams[myTeamId];
-
-            if (myTeam.sheriffChances > 0) {
-                playSound('sheriff');
-                myTeam.sheriffChances -= 1;
-                var q = window.questionBank[data.currentQuestionIdx];
-
-                myTeam.sheriffModalData = {
-                    teamName: myTeam.name + ' 학생',
-                    sheriffHint: q.sheriffHint,
-                    concept: q.concept,
-                    timestamp: Date.now()
-                };
-
-                if (window.db) {
-                    window.getRoomDocRef(data.roomId).update({
-                        teams: data.teams
-                    });
-                } else {
-                    window.checkSheriffModalState();
-                }
-            }
-        };
-
-        window.checkSheriffModalState = function() {
-            var data = window.gameState.roomData;
-            var myTeamId = window.gameState.myTeamId;
-
-            if (window.gameState.role === 'client' && data && data.teams && data.teams[myTeamId] && data.teams[myTeamId].sheriffModalData) {
-                var myModalData = data.teams[myTeamId].sheriffModalData;
-                
-                document.getElementById('sheriffTeamName').innerText = myModalData.teamName + '의 보안관 찬스!';
-                document.getElementById('sheriffHintText').innerText = myModalData.sheriffHint;
-                document.getElementById('sheriffConceptText').innerText = myModalData.concept;
-
-                var modal = document.getElementById('sheriffModal');
-                var card = document.getElementById('sheriffModalCard');
-                modal.classList.remove('hidden');
-                setTimeout(function() {
-                    card.classList.remove('scale-95', 'opacity-0');
-                    card.classList.add('scale-100', 'opacity-100');
-                }, 10);
-            }
-        };
-
-        window.closeSheriffModal = function() {
-            playSound('click');
-            var modal = document.getElementById('sheriffModal');
-            var card = document.getElementById('sheriffModalCard');
-            card.classList.remove('scale-100', 'opacity-100');
-            card.classList.add('scale-95', 'opacity-0');
-            setTimeout(function() {
-                modal.classList.add('hidden');
-            }, 200);
-
-            if (window.gameState.role === 'client' && window.db) {
-                var data = window.gameState.roomData;
-                var myTeamId = window.gameState.myTeamId;
-                if (data && data.teams && data.teams[myTeamId]) {
-                    data.teams[myTeamId].sheriffModalData = null;
-                    window.getRoomDocRef(data.roomId).update({ teams: data.teams });
-                }
             }
         };
 
@@ -1586,7 +1465,11 @@
                 window.getRoomDocRef(data.roomId).update({ status: 'debriefing' });
             }
 
-            var teamsList = Object.values(data.teams).sort(function(a, b) { return b.points - a.points; });
+            var teamsList = Object.values(data.teams).sort(function(a, b) {
+                var netA = Math.max(0, a.points - (a.debt || 0));
+                var netB = Math.max(0, b.points - (b.debt || 0));
+                return netB - netA;
+            });
             var container = document.getElementById('appContainer');
 
             container.innerHTML = `
@@ -1605,9 +1488,14 @@
                         </h3>
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 max-h-[48vh] overflow-y-auto p-1">
                             ${teamsList.map(function(team, idx) {
-                                var rescueBadge = team.rescueUsed 
-                                    ? `<span class="text-[10px] bg-amber-500/20 text-amber-300 border border-amber-500/30 px-1.5 py-0.5 rounded font-bold ml-2">구제 사용 💡</span>` 
-                                    : `<span class="text-[10px] bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded font-bold ml-2">정상 진행 ✨</span>`;
+                                var debt = team.debt || 0;
+                                var netScore = Math.max(0, team.points - debt);
+                                var loanCount = team.loanCount || 0;
+                                var rescueBadge = loanCount > 0 
+                                    ? (debt > 0 
+                                        ? `<span class="text-[10px] bg-rose-500/20 text-rose-300 border border-rose-500/30 px-1.5 py-0.5 rounded font-bold ml-2">대출 ${loanCount}회 (미상환 ${debt}p 차감)</span>` 
+                                        : `<span class="text-[10px] bg-emerald-500/20 text-emerald-300 border border-emerald-500/30 px-1.5 py-0.5 rounded font-bold ml-2">대출 ${loanCount}회 (전액 상환 완료! ✨)</span>`)
+                                    : `<span class="text-[10px] bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded font-bold ml-2">대출 미이용 ✨</span>`;
 
                                 return `
                                     <div class="bg-slate-900/80 p-3.5 rounded-2xl border ${idx === 0 ? 'border-amber-400/60 bg-amber-950/20' : 'border-slate-700/60'} flex justify-between items-center">
@@ -1615,11 +1503,16 @@
                                             <span class="w-7 h-7 rounded-xl font-black text-xs flex items-center justify-center shrink-0 ${idx === 0 ? 'bg-amber-400 text-slate-950' : idx === 1 ? 'bg-slate-300 text-slate-950' : idx === 2 ? 'bg-amber-700 text-white' : 'bg-slate-800 text-slate-400'}">
                                                 ${idx + 1}
                                             </span>
-                                            <span class="font-bold text-sm text-slate-100 font-title truncate">${team.name}</span>
-                                            ${rescueBadge}
+                                            <div class="truncate">
+                                                <div class="font-bold text-sm text-slate-100 font-title truncate">${team.name}</div>
+                                                ${rescueBadge}
+                                            </div>
                                         </div>
-                                        <div class="text-emerald-400 font-black text-base shrink-0">
-                                            ${team.points} pt
+                                        <div class="text-right shrink-0">
+                                            <div class="text-emerald-400 font-black text-base">
+                                                ${netScore} pt
+                                            </div>
+                                            ${debt > 0 ? `<div class="text-[10px] text-slate-400">보유: ${team.points}p</div>` : ''}
                                         </div>
                                     </div>
                                 `;
